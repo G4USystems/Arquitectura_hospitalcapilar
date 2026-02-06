@@ -1,0 +1,51 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users can read/write their own user document
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Quizzes - owner can CRUD, published quizzes readable by anyone (for public quiz)
+    match /quizzes/{quizId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow read: if resource.data.status == 'published';
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
+
+      // Screens subcollection - same rules as parent quiz
+      match /screens/{screenId} {
+        allow read: if request.auth != null && get(/databases/$(database)/documents/quizzes/$(quizId)).data.userId == request.auth.uid;
+        allow read: if get(/databases/$(database)/documents/quizzes/$(quizId)).data.status == 'published';
+        allow write: if request.auth != null && get(/databases/$(database)/documents/quizzes/$(quizId)).data.userId == request.auth.uid;
+      }
+    }
+
+    // Campaigns - owner can CRUD
+    match /campaigns/{campaignId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Leads - quiz owner can read, anyone can create (public quiz submission)
+    match /leads/{leadId} {
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if true;
+      allow update: if request.auth != null && resource.data.userId == request.auth.uid;
+    }
+
+    // Integrations - owner can CRUD
+    match /integrations/{integrationId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+
+    // Experiments - owner can CRUD
+    match /experiments/{experimentId} {
+      allow read, write: if request.auth != null && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}

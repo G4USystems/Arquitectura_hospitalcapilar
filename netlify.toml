@@ -1,8 +1,29 @@
-[build]
-  command = "npm run build"
-  publish = "dist"
+# =============================================
+# Hospital Capilar Platform - Netlify Configuration
+# =============================================
 
+[build]
+  # Base directory (monorepo root)
+  base = "."
+
+  # Build command for the quiz app
+  command = "cd packages/quiz && npm install && npm run build"
+
+  # Publish directory (quiz build output)
+  publish = "packages/quiz/dist"
+
+[build.environment]
+  # Use Node 20 LTS
+  NODE_VERSION = "20"
+
+# SPA redirect - all routes go to index.html
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# =============================================
+# Dashboard site (deploy separately if needed)
+# =============================================
+# To deploy dashboard, create a separate Netlify site
+# with base = "packages/dashboard"
