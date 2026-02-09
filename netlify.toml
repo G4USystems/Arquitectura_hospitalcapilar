@@ -1,29 +1,24 @@
 # =============================================
 # Hospital Capilar Platform - Netlify Configuration
+# Single site: Quiz at / and Dashboard at /dashboard/
 # =============================================
 
 [build]
-  # Base directory (monorepo root)
   base = "."
-
-  # Build command: install shared deps first, then build quiz
-  command = "cd packages/shared && npm install && cd ../quiz && npm install && npm run build"
-
-  # Publish directory (quiz build output)
+  command = "cd packages/shared && npm install && cd ../quiz && npm install && npm run build && cd ../dashboard && npm install && VITE_BASE_PATH=/dashboard/ npm run build && mkdir -p ../quiz/dist/dashboard && cp -r dist/* ../quiz/dist/dashboard/"
   publish = "packages/quiz/dist"
 
 [build.environment]
-  # Use Node 20 LTS
   NODE_VERSION = "20"
 
-# SPA redirect - all routes go to index.html
+# Dashboard SPA - must come BEFORE the catch-all
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/dashboard/index.html"
+  status = 200
+
+# Quiz SPA - catch-all
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-# =============================================
-# Dashboard site (deploy separately if needed)
-# =============================================
-# To deploy dashboard, create a separate Netlify site
-# with base = "packages/dashboard"
