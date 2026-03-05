@@ -417,6 +417,12 @@ const HospitalCapilarQuiz = () => {
       <div className="min-h-screen bg-white font-sans">
         <div className="h-1.5 w-full" style={{ backgroundColor: theme.primary }}></div>
         <div className="max-w-2xl mx-auto p-6 pt-12">
+          <button
+            onClick={() => { setStepIndex(activeQuestions.length - 1); setFinalResult(null); }}
+            className="flex items-center gap-2 text-gray-400 hover:text-gray-600 mb-8 p-2 -ml-2 rounded-full hover:bg-gray-50 transition-colors"
+          >
+            <ArrowLeft size={24} />
+          </button>
           <h2 className="text-3xl font-bold text-gray-900 mb-8">Gracias por tus respuestas, {nombre.split(' ')[0]}.</h2>
 
           <div className="prose prose-emerald max-w-none mb-10 bg-gray-50 p-6 rounded-2xl border border-gray-100">
