@@ -283,6 +283,59 @@ const HospitalCapilarQuiz = () => {
     else frame = 'FRAME_A';
 
     setFinalResult({ ecp, score, frame, nombre: finalAnswers.nombre || 'Paciente' });
+
+    // Send lead to GoHighLevel
+    sendToGoHighLevel(finalAnswers, { ecp, score, frame });
+  };
+
+  const sendToGoHighLevel = async (data, result) => {
+    const apiKey = import.meta.env.VITE_GHL_API_KEY;
+    const locationId = import.meta.env.VITE_GHL_LOCATION_ID;
+    if (!apiKey || !locationId) return;
+
+    const nameParts = (data.nombre || '').trim().split(' ');
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+
+    const quizSummary = Object.entries(data)
+      .filter(([key]) => !['nombre', 'email', 'telefono'].includes(key))
+      .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(', ') : val}`)
+      .join('\n');
+
+    try {
+      await fetch('https://services.leadconnectorhq.com/contacts/', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28',
+        },
+        body: JSON.stringify({
+          locationId,
+          firstName,
+          lastName,
+          email: data.email || '',
+          phone: data.telefono || '',
+          tags: [result.ecp, result.frame, `score-${result.score}`],
+          source: 'Quiz Hospital Capilar',
+          customFields: [
+            { key: 'ecp', field_value: result.ecp },
+            { key: 'lead_score', field_value: String(result.score) },
+            { key: 'frame', field_value: result.frame },
+            { key: 'ubicacion', field_value: data.ubicacion || '' },
+            { key: 'sexo', field_value: data.sexo || '' },
+            { key: 'edad', field_value: data.edad || '' },
+            { key: 'problema', field_value: data.problema || '' },
+            { key: 'tiempo', field_value: data.tiempo || '' },
+            { key: 'formato', field_value: data.formato || '' },
+            { key: 'inversion', field_value: data.inversion || '' },
+          ],
+          notes: `Quiz completado\n\nECP: ${result.ecp}\nScore: ${result.score}\nFrame: ${result.frame}\n\nRespuestas:\n${quizSummary}`,
+        }),
+      });
+    } catch (err) {
+      console.error('GHL sync error:', err);
+    }
   };
 
   const handleNext = () => {
