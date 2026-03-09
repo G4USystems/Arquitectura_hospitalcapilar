@@ -31,3 +31,6 @@ dist-ssr
 # Tool directories
 .claude/
 .specify/
+
+# Local Netlify folder
+.netlify

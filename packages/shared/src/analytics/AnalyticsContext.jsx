@@ -37,7 +37,7 @@ export function AnalyticsProvider({ children }) {
   useEffect(() => {
     const checkPostHog = () => {
       const ph = getPostHog();
-      if (ph?.__loaded && ph.onFeatureFlags) {
+      if (ph?.capture && ph.onFeatureFlags) {
         ph.onFeatureFlags(() => {
           const variant = ph.getFeatureFlag?.('quiz-variant');
           setExperimentVariant(variant || 'control');
@@ -56,7 +56,7 @@ export function AnalyticsProvider({ children }) {
     if (sessionId && typeof window !== 'undefined') {
       const trackSession = () => {
         const ph = getPostHog();
-        if (ph?.__loaded) {
+        if (ph?.capture) {
           const utmParams = getUTMParams();
           ph.capture(ANALYTICS_EVENTS.SESSION_START, {
             session_id: sessionId,
@@ -87,7 +87,7 @@ export function AnalyticsProvider({ children }) {
       const timeSpent = quizStartTime ? Date.now() - quizStartTime : 0;
 
       const ph = getPostHog();
-      if (ph?.__loaded) {
+      if (ph?.capture) {
         ph.capture(ANALYTICS_EVENTS.QUIZ_ABANDONED, {
           session_id: sessionId,
           last_question_index: answersCount,

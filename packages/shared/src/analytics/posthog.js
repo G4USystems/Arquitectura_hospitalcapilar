@@ -18,7 +18,8 @@ export function initPostHog() {
   }
 
   posthog.init(apiKey, {
-    api_host: apiHost,
+    api_host: '/ingest',
+    ui_host: 'https://eu.posthog.com',
     capture_pageview: true,
     capture_pageleave: true,
     autocapture: true,

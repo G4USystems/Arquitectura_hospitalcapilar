@@ -9,7 +9,7 @@ const getPostHog = () => typeof window !== 'undefined' ? window.posthog : null;
 const safeCapture = (event, properties) => {
   try {
     const ph = getPostHog();
-    if (ph?.__loaded) {
+    if (ph?.capture) {
       ph.capture(event, properties);
     }
   } catch (e) {
@@ -136,7 +136,7 @@ export function useAnalytics() {
     // Identificar usuario
     try {
       const ph = getPostHog();
-      if (leadData.email && ph?.__loaded) {
+      if (leadData.email && ph?.identify) {
         ph.identify(leadData.email, {
           name: leadData.name,
           phone: leadData.phone,

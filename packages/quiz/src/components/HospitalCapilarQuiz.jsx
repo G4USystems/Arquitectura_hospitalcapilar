@@ -31,12 +31,12 @@ function generateAgentMessage(answers, result, labels) {
   else if (frame === 'FRAME_D' || score < 30) urgencia = 'baja';
 
   let intro = '';
-  if (ecp === 'ECP1') intro = `${nombre} es un hombre que lleva ${tiempoLabel} con caída capilar. Ya probó ${probadoLabels} sin resultado. No tiene diagnóstico formal.`;
-  else if (ecp === 'ECP2') intro = `${nombre} es una mujer con caída probablemente hormonal. Lleva ${tiempoLabel} con el problema.`;
-  else if (ecp === 'ECP3') intro = `${nombre} es un joven (${edadLabel}) que está empezando a notar caída. Tiene poco o ningún tratamiento previo.`;
-  else if (ecp === 'ECP4') intro = `${nombre} tuvo mala experiencia en ${labels.clinica_previa || 'otra clínica'}. Viene con desconfianza.`;
-  else if (ecp === 'ECP5') intro = `${nombre} ya se hizo un trasplante (${labels.cirugia_lugar || 'no especificado'}) y necesita mantenimiento.`;
-  else if (ecp === 'ECP6') intro = `${nombre} tiene caída desde el embarazo/parto. Lleva ${tiempoLabel} con el problema.`;
+  if (ecp === 'Hombre con caida sin diagnostico') intro = `${nombre} es un hombre que lleva ${tiempoLabel} con caída capilar. Ya probó ${probadoLabels} sin resultado. No tiene diagnóstico formal.`;
+  else if (ecp === 'Mujer con caida hormonal') intro = `${nombre} es una mujer con caída probablemente hormonal. Lleva ${tiempoLabel} con el problema.`;
+  else if (ecp === 'Joven con alopecia temprana') intro = `${nombre} es un joven (${edadLabel}) que está empezando a notar caída. Tiene poco o ningún tratamiento previo.`;
+  else if (ecp === 'Mala experiencia otra clinica') intro = `${nombre} tuvo mala experiencia en ${labels.clinica_previa || 'otra clínica'}. Viene con desconfianza.`;
+  else if (ecp === 'Post-trasplante mantenimiento') intro = `${nombre} ya se hizo un trasplante (${labels.cirugia_lugar || 'no especificado'}) y necesita mantenimiento.`;
+  else if (ecp === 'Caida postparto') intro = `${nombre} tiene caída desde el embarazo/parto. Lleva ${tiempoLabel} con el problema.`;
   else intro = `${nombre} tiene problemas de cuero cabelludo (caspa, irritación). NO es candidato/a — derivar a dermatología.`;
 
   const condicionesText = answers.sexo === 'mujer' && answers.condicion?.length > 0 && !answers.condicion.includes('desconocida')
@@ -51,41 +51,152 @@ function generateAgentMessage(answers, result, labels) {
     ? `${labels._utm_source}/${labels._utm_medium || ''}${labels._utm_campaign ? ` (${labels._utm_campaign})` : ''}`
     : 'Directo / Orgánico';
 
-  const message = `--- FICHA LEAD: ${answers.nombre || 'Sin nombre'} ---
+  // Objeciones anticipadas por perfil
+  let objeciones = '';
+  if (ecp === 'Hombre con caida sin diagnostico') {
+    objeciones = `- "Ya probé minoxidil y no funcionó" → El 40-60% no responde a minoxidil sin saber la causa. Sin diagnóstico, es como tomar pastillas a ciegas. Nosotros primero diagnosticamos y luego tratamos.
+- "Es muy caro" → La consulta de 195€ incluye tricoscopia digital + análisis hormonal + plan personalizado. En farmacias gastarás más sin resultado.
+- "No sé si es el momento" → Cuanto más esperas, más folículos se pierden. Los que se van no vuelven. Hoy tienes más pelo que mañana.`;
+  } else if (ecp === 'Mujer con caida hormonal') {
+    objeciones = `- "Mi dermatólogo dice que es estrés" → El 70% de alopecias femeninas tienen componente hormonal. Nosotros cruzamos dermatología con endocrinología — algo que nadie más hace.
+- "¿Y si es temporal?" → Si lleva más de 6 meses, no es temporal. Un diagnóstico a tiempo evita que se convierta en algo permanente.
+- "Ya me hicieron análisis y salió todo bien" → Los análisis estándar no miden los marcadores capilares específicos. Nuestro estudio es diferente.`;
+  } else if (ecp === 'Joven con alopecia temprana') {
+    objeciones = `- "Todavía no es tan grave" → Exacto, y por eso es el MEJOR momento. Tratar alopecia temprana tiene un 90% de éxito vs 40% cuando ya es avanzada.
+- "Soy muy joven para esto" → La alopecia androgenética puede empezar a los 18. No es cuestión de edad, es genética. Actuar ahora = mantener tu pelo.
+- "Mis amigos me dicen que es normal" → Perder pelo NO es normal a tu edad. Una consulta te saca de dudas en 30 minutos.`;
+  } else if (ecp === 'Mala experiencia otra clinica') {
+    objeciones = `- "Ya me gastó dinero en otra clínica y no funcionó" → Entiendo perfectamente. Por eso nosotros NO vendemos tratamientos en la primera cita. Primero diagnóstico, luego opciones. Sin presión.
+- "¿Cómo sé que ustedes son diferentes?" → Somos el único centro en España que combina tricología + endocrinología + cirugía bajo un mismo equipo médico. Te damos un diagnóstico completo, no solo un presupuesto.
+- "No quiero que me vendan nada" → En la consulta diagnóstica te explicamos qué tienes y qué opciones existen. Tú decides si y cuándo actuar.`;
+  } else if (ecp === 'Post-trasplante mantenimiento') {
+    objeciones = `- "Ya me hice el trasplante, ¿necesito más?" → El trasplante mueve pelo, pero no frena la caída del pelo nativo. Sin mantenimiento, en 3-5 años puedes perder más de lo que ganaste.
+- "En la clínica donde me operé no me dijeron nada de esto" → Muchas clínicas solo hacen la cirugía. Nosotros protegemos tu inversión con un plan de mantenimiento personalizado.
+- "¿Cuánto cuesta el mantenimiento?" → Depende de tu caso, pero es una fracción de lo que costó el trasplante. La consulta diagnóstica de 195€ incluye el plan completo.`;
+  } else if (ecp === 'Caida postparto') {
+    objeciones = `- "Me dicen que es normal después del parto" → Sí, es común. El 50% de madres lo sufren. Pero si pasan más de 6 meses y no se recupera, puede haber una alopecia subyacente que el embarazo activó.
+- "Estoy dando el pecho, ¿puedo tratarme?" → Sí, hay tratamientos compatibles con la lactancia. En la consulta evaluamos opciones seguras para ti y tu bebé.
+- "Ya se me pasará sola" → Ojalá, pero mejor descartarlo con un diagnóstico. Si hay AGA de fondo, cada mes sin tratar cuenta.`;
+  }
 
-URGENCIA: ${urgencia.toUpperCase()} | Score: ${score} | Perfil: ${ecp}
-ORIGEN: ${sourceInfo}
+  // Descripción natural del problema según ECP (para usar en el guión)
+  let problemaNatural = 'la caída de pelo';
+  if (ecp === 'Hombre con caida sin diagnostico') problemaNatural = 'la caída de pelo sin tener un diagnóstico claro';
+  else if (ecp === 'Mujer con caida hormonal') problemaNatural = 'la pérdida de densidad capilar';
+  else if (ecp === 'Joven con alopecia temprana') problemaNatural = 'los primeros signos de caída';
+  else if (ecp === 'Mala experiencia otra clinica') problemaNatural = 'tu experiencia anterior y la caída de pelo';
+  else if (ecp === 'Post-trasplante mantenimiento') problemaNatural = 'el mantenimiento después del trasplante';
+  else if (ecp === 'Caida postparto') problemaNatural = 'la caída de pelo desde el embarazo';
 
-RESUMEN:
-${intro}${condicionesText}
+  // Guión de apertura personalizado
+  let apertura = '';
+  if (frame === 'FRAME_A') {
+    apertura = `"Hola ${nombre}, te llamo de Hospital Capilar. Hiciste nuestro diagnóstico online y vi que llevas tiempo con ${problemaNatural}. Quería confirmar tu cita para el diagnóstico presencial — es la forma más rápida de tener un plan claro. ¿Te viene mejor por la mañana o por la tarde?"`;
+  } else if (frame === 'FRAME_C') {
+    apertura = `"Hola ${nombre}, te llamo de Hospital Capilar. Vi que completaste nuestro test capilar sobre ${problemaNatural} y quería llamarte personalmente. ¿Tienes un par de minutos para que te cuente qué vimos en tus respuestas y qué opciones tienes?"`;
+  } else if (frame === 'FRAME_D') {
+    apertura = `Enviar WhatsApp/email: "Hola ${nombre}, gracias por completar el diagnóstico online de Hospital Capilar. Hemos analizado tus respuestas sobre ${problemaNatural} y te adjunto una guía personalizada. Si tienes alguna duda, puedes responder a este mensaje. Sin compromiso."`;
+  } else if (frame === 'WAITLIST') {
+    apertura = `"Hola ${nombre}, gracias por hacer el diagnóstico online. Ahora mismo no tenemos consulta cerca de ${ubicacionLabel}, pero estamos abriendo nuevas sedes. Te apunto en la lista prioritaria para que seas de los primeros en enterarte. ¿Te parece bien?"`;
+  } else if (frame === 'DERIVACION') {
+    apertura = `Enviar email informativo: "Hola ${nombre}, gracias por usar nuestra herramienta de diagnóstico. Según tus respuestas, te recomendamos consultar con un dermatólogo para una evaluación completa del cuero cabelludo. Te adjuntamos información útil."`;
+  }
 
-DATOS CLAVE:
+  const message = `GUION DE APERTURA
+${apertura}
+
+OBJECIONES FRECUENTES Y RESPUESTAS
+${objeciones}
+
+ESTRATEGIA DE CIERRE
+${frame === 'FRAME_A' ? `CIERRE DIRECTO: Este lead quiere actuar YA. No divagar — ir directo a agendar cita.
+- "Tenemos disponibilidad esta semana en ${ubicacionLabel}. ¿Prefieres martes o jueves?"
+- Si duda: "La consulta incluye tricoscopia + análisis completo. Los 195€ se descuentan si inicias tratamiento."
+- Urgencia: "Las plazas de esta semana se están llenando, te reservo una ahora mismo."` : ''}${frame === 'FRAME_C' ? `CIERRE CONSULTIVO: Este lead necesita confianza antes de decidir.
+- Primero escuchar, luego proponer. No mencionar precio hasta que pregunte.
+- "¿Qué es lo que más te preocupa de tu situación actual?"
+- Cuando esté listo: "¿Te gustaría que te reserve una consulta para tener un diagnóstico profesional? Así sales de dudas."
+- Si duda del precio: "Los 195€ incluyen TODO el estudio. Y si inicias tratamiento, se descuentan."` : ''}${frame === 'FRAME_D' ? `CIERRE NURTURING: Este lead necesita tiempo. NO presionar.
+- Enviar guía PDF + caso de éxito similar a su perfil
+- Follow-up en 3-5 días: "Hola ${nombre}, ¿pudiste leer la información? ¿Tienes alguna duda?"
+- Si responde: pasar a conversación consultiva (FRAME_C)
+- Si no responde: segundo follow-up en 7 días y cerrar secuencia` : ''}${frame === 'WAITLIST' ? `CIERRE WAITLIST: Mantener el interés sin frustrar.
+- Apuntar en CRM con tag "waitlist-${ubicacionLabel.toLowerCase().replace(/ /g, '-')}"
+- Enviar email de confirmación de lista de espera
+- Reactivar cuando haya novedad de apertura en su zona` : ''}${frame === 'DERIVACION' ? `NO ES LEAD COMERCIAL. Solo enviar información educativa.
+- Email con guía de cuidado del cuero cabelludo
+- NO hacer follow-up comercial
+- NO ofrecer cita` : ''}`;
+
+  const quizAnswers = `RESPUESTAS DEL QUIZ — ${answers.nombre || 'Sin nombre'}
+
+- Sexo: ${labels.sexo || answers.sexo || 'N/A'}
+- Edad: ${edadLabel}
+- Problema: ${problemLabel}
+- Tiempo: ${tiempoLabel}
+- Tratamientos probados: ${probadoLabels}
 - Impacto emocional: ${impactoLabel}
-- Conocimiento de su alopecia: ${conocimientoLabel}
+- Conocimiento: ${conocimientoLabel}
 - Motivacion: ${motivacionLabel}
-- Inversion dispuesta: ${inversionLabel}
+- Inversion: ${inversionLabel}
 - Formato preferido: ${formatoLabel}
-- Ubicacion: ${ubicacionLabel}
+- Ubicacion: ${ubicacionLabel}`;
 
-COMO CONTACTAR:
-${frame === 'FRAME_A' ? `${pronombre} quiere reservar consulta. Contactar para confirmar cita (195 euros). Es lead caliente.` : ''}${frame === 'FRAME_C' ? `${pronombre} prefiere que le llamen. Contactar por telefono, sin presion. Explicar proceso y resolver dudas antes de ofrecer cita.` : ''}${frame === 'FRAME_D' ? `${pronombre} necesita mas informacion. Enviar guia PDF y hacer seguimiento suave en 3-5 dias.` : ''}${frame === 'WAITLIST' ? `${pronombre} no esta cerca de ninguna clinica operativa. Apuntar en lista de espera y avisar cuando abramos en su zona.` : ''}${frame === 'DERIVACION' ? `NO contactar comercialmente. Enviar email educativo sobre cuero cabelludo y recomendar dermatologo.` : ''}
-
-TIPS PARA LA LLAMADA:
-${ecp === 'ECP1' ? `- Mencionar que el 40-60% no responden a minoxidil sin diagnostico. Enfatizar que el problema es la falta de diagnostico, no los productos.` : ''}${ecp === 'ECP2' ? `- Hablar de la conexion pelo-hormonas. Mencionar que nadie cruza dermatologia con endocrinologia como nosotros.` : ''}${ecp === 'ECP3' ? `- No alarmar. Enfatizar que actuar temprano = mejores resultados. Ofrecer consulta informativa.` : ''}${ecp === 'ECP4' ? `- CUIDADO: viene con desconfianza. No presionar. Ser transparente. Ofrecer toda la info antes de pedir decision.` : ''}${ecp === 'ECP5' ? `- Hablar de proteger la inversion del trasplante. El pelo nativo necesita mantenimiento.` : ''}${ecp === 'ECP6' ? `- Tranquilizar: el 50% de madres lo sufren. Pero validar que necesita diagnostico para descartar AGA subyacente.` : ''}
-
-CONTACTO:
-- Nombre: ${answers.nombre || 'N/A'}
-- Email: ${answers.email || 'N/A'}
-- Telefono: ${answers.telefono || 'N/A'}
----`;
-
-  return message;
+  return { message, quizAnswers };
 }
+
+// ============================================
+// NICHO WELCOME CONFIGS
+// ============================================
+const NICHO_WELCOME = {
+  mujeres: {
+    badge: 'Especialistas en Alopecia Femenina',
+    headline: '¿Tu pelo pierde densidad y',
+    headlineAccent: 'nadie te da una respuesta clara?',
+    subheadline: 'El 40% de las mujeres sufre pérdida de pelo. La mayoría recibe un diagnóstico genérico. Nosotros cruzamos tu perfil hormonal con un estudio capilar completo para encontrar la causa real.',
+    cta: 'Descubre qué le pasa a tu pelo',
+  },
+  jovenes: {
+    badge: 'Alopecia Temprana: Actúa Antes',
+    headline: '¿Notas que tus entradas',
+    headlineAccent: 'retroceden antes de tiempo?',
+    subheadline: 'La alopecia a los 18-28 años es más común de lo que piensas. Y cuanto antes actúes, más pelo conservas. No esperes a que sea tarde — un diagnóstico a tiempo cambia todo.',
+    cta: 'Evalúa tu caso en 3 minutos',
+  },
+  'hombres-caida': {
+    badge: 'Diagnóstico Capilar Avanzado',
+    headline: '¿Llevas tiempo con caída y',
+    headlineAccent: 'nada de lo que pruebas funciona?',
+    subheadline: 'El 60% de hombres que usan minoxidil no ven resultados. No porque el producto no sirva — sino porque nunca les diagnosticaron correctamente la causa de su caída.',
+    cta: 'Descubre por qué no funciona',
+  },
+  'segunda-opinion': {
+    badge: 'Segunda Opinión Capilar',
+    headline: '¿Tuviste una mala experiencia',
+    headlineAccent: 'en otra clínica capilar?',
+    subheadline: 'Sabemos que hay clínicas que prometen mucho y entregan poco. Hospital Capilar es un centro médico, no un centro estético. Aquí no hay consultas gratuitas que son ventas disfrazadas.',
+    cta: 'Evalúa tu caso sin compromiso',
+  },
+  'post-trasplante': {
+    badge: 'Mantenimiento Post-Trasplante',
+    headline: 'Ya te operaste.',
+    headlineAccent: '¿Quién protege tu inversión?',
+    subheadline: 'Un trasplante capilar sin plan de mantenimiento pierde resultados con el tiempo. El pelo trasplantado no se cae, pero el pelo nativo sigue sometido a los mismos factores que causaron la caída original.',
+    cta: 'Protege tu trasplante',
+  },
+  postparto: {
+    badge: 'Caída Capilar Postparto',
+    headline: '¿Se te cae el pelo',
+    headlineAccent: 'desde el embarazo o el parto?',
+    subheadline: 'El efluvio postparto afecta al 50% de madres. En la mayoría de casos es temporal, pero en algunas mujeres revela una alopecia subyacente que necesita tratamiento. La única forma de saberlo es con un diagnóstico.',
+    cta: 'Descubre si es temporal o algo más',
+  },
+};
 
 // ============================================
 // MAIN COMPONENT
 // ============================================
-const HospitalCapilarQuiz = () => {
+const HospitalCapilarQuiz = ({ nicho = null }) => {
   const [stepIndex, setStepIndex] = useState(-1);
   const [answers, setAnswers] = useState({ probado: [], condicion: [] });
   const [showMicroTip, setShowMicroTip] = useState(false);
@@ -116,6 +227,29 @@ const HospitalCapilarQuiz = () => {
       }
     } catch {}
   }, []);
+
+  // ============================================
+  // TRACK ABANDONMENT ON PAGE LEAVE
+  // ============================================
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (stepIndex >= 0 && stepIndex < activeQuestions.length) {
+        const q = activeQuestions[stepIndex];
+        const timeInQuiz = quizStartTime.current ? Math.round((Date.now() - quizStartTime.current) / 1000) : 0;
+        analytics.trackEvent('quiz_abandoned', {
+          last_screen_id: q.id,
+          last_screen_index: stepIndex,
+          last_screen_type: q.type === 'form' ? 'contact_form' : 'question',
+          total_screens: activeQuestions.length,
+          progress_pct: Math.round((stepIndex / activeQuestions.length) * 100),
+          time_in_quiz_seconds: timeInQuiz,
+          answers_count: Object.keys(answers).length,
+        });
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
 
   // ============================================
   // QUESTIONS
@@ -403,15 +537,15 @@ const HospitalCapilarQuiz = () => {
   // SCORING ENGINE
   // ============================================
   const processResults = (finalAnswers) => {
-    let ecp = 'ECP1';
+    let ecp = 'Hombre con caida sin diagnostico';
     let score = 0;
 
-    if (finalAnswers.problema === 'cuero-cabelludo') ecp = 'DERIVACION';
-    else if (finalAnswers.problema === 'post-cirugia' || (finalAnswers.probado || []).includes('trasplante')) ecp = 'ECP5';
-    else if (finalAnswers.problema === 'mala-experiencia') ecp = 'ECP4';
-    else if (finalAnswers.sexo === 'mujer' && finalAnswers.problema === 'postparto') ecp = 'ECP6';
-    else if (finalAnswers.sexo === 'mujer' && ['hormonal', 'densidad-mujer', 'caida-general'].includes(finalAnswers.problema)) ecp = 'ECP2';
-    else if (finalAnswers.sexo === 'hombre' && finalAnswers.edad === '18-25' && ((finalAnswers.probado || []).includes('nada') || (finalAnswers.probado || []).includes('otc'))) ecp = 'ECP3';
+    if (finalAnswers.problema === 'cuero-cabelludo') ecp = 'No candidato - cuero cabelludo';
+    else if (finalAnswers.problema === 'post-cirugia' || (finalAnswers.probado || []).includes('trasplante')) ecp = 'Post-trasplante mantenimiento';
+    else if (finalAnswers.problema === 'mala-experiencia') ecp = 'Mala experiencia otra clinica';
+    else if (finalAnswers.sexo === 'mujer' && finalAnswers.problema === 'postparto') ecp = 'Caida postparto';
+    else if (finalAnswers.sexo === 'mujer' && ['hormonal', 'densidad-mujer', 'caida-general'].includes(finalAnswers.problema)) ecp = 'Mujer con caida hormonal';
+    else if (finalAnswers.sexo === 'hombre' && finalAnswers.edad === '18-25' && ((finalAnswers.probado || []).includes('nada') || (finalAnswers.probado || []).includes('otc'))) ecp = 'Joven con alopecia temprana';
 
     if (finalAnswers.tiempo === '3a+') score += 30;
     else if (finalAnswers.tiempo === '1-3a') score += 20;
@@ -439,46 +573,79 @@ const HospitalCapilarQuiz = () => {
     if (finalAnswers.formato === 'info') score -= 10;
 
     let frame = '';
-    if (ecp === 'DERIVACION') frame = 'DERIVACION';
+    if (ecp === 'No candidato - cuero cabelludo') frame = 'DERIVACION';
     else if (!['madrid', 'murcia', 'pontevedra'].includes(ubi) && ubi !== '') frame = 'WAITLIST';
-    else if (finalAnswers.formato === 'llamada' || ecp === 'ECP4') frame = 'FRAME_C';
+    else if (finalAnswers.formato === 'llamada' || ecp === 'Mala experiencia otra clinica') frame = 'FRAME_C';
     else if (finalAnswers.formato === 'info' || score < 40) frame = 'FRAME_D';
     else frame = 'FRAME_A';
 
     const result = { ecp, score, frame, nombre: finalAnswers.nombre || 'Paciente' };
     setFinalResult(result);
 
-    // Generate labels and agent message
-    const labels = {
-      ...buildAllLabels(finalAnswers),
-      _utm_source: utmParams.utm_source || null,
-      _utm_medium: utmParams.utm_medium || null,
-      _utm_campaign: utmParams.utm_campaign || null,
-    };
-    const agentMessage = generateAgentMessage(finalAnswers, result, labels);
-    const readableAnswers = buildReadableAnswers(finalAnswers);
+    // Generate labels and agent message FIRST (needed by GHL and Firestore)
+    let agentMessage = '';
+    let quizAnswersText = '';
+    let readableAnswers = {};
+    try {
+      const labels = {
+        ...buildAllLabels(finalAnswers),
+        _utm_source: utmParams.utm_source || null,
+        _utm_medium: utmParams.utm_medium || null,
+        _utm_campaign: utmParams.utm_campaign || null,
+      };
+      const generated = generateAgentMessage(finalAnswers, result, labels);
+      agentMessage = generated.message;
+      quizAnswersText = generated.quizAnswers;
+      readableAnswers = buildReadableAnswers(finalAnswers);
+    } catch (e) {
+      console.error('[Labels] Failed to generate agent message:', e);
+    }
 
-    // Save lead
-    saveLead(finalAnswers, result, readableAnswers, agentMessage);
-
-    // Send to GHL
-    sendToGoHighLevel(finalAnswers, result, agentMessage);
+    // Send to GHL, then save to Firestore with GHL status (async, non-blocking)
+    (async () => {
+      let ghlResult = { status: 'pending' };
+      try {
+        ghlResult = await sendToGoHighLevel(finalAnswers, result, agentMessage, quizAnswersText);
+      } catch (e) {
+        ghlResult = { status: 'error', error: e.message };
+        console.error('[GHL] Failed to send:', e);
+      }
+      try {
+        saveLead(finalAnswers, result, readableAnswers, agentMessage, ghlResult);
+      } catch (e) {
+        console.error('[Lead] Failed to save lead:', e);
+      }
+    })();
 
     // Track completion
-    const totalTime = quizStartTime.current ? Date.now() - quizStartTime.current : 0;
-    analytics.trackQuizCompleted(finalAnswers);
-    analytics.trackEvent('quiz_result', {
-      ecp: result.ecp,
-      score: result.score,
-      frame: result.frame,
-      total_time_ms: totalTime,
-    });
+    try {
+      const totalTime = quizStartTime.current ? Date.now() - quizStartTime.current : 0;
+      analytics.trackQuizCompleted(finalAnswers);
+      analytics.trackEvent('quiz_result', {
+        ecp: result.ecp,
+        score: result.score,
+        frame: result.frame,
+        total_time_seconds: Math.round(totalTime / 1000),
+        total_questions: activeQuestions.length,
+        sexo: finalAnswers.sexo,
+        edad: finalAnswers.edad,
+        problema: finalAnswers.problema,
+        ubicacion: finalAnswers.ubicacion,
+        formato: finalAnswers.formato,
+        impacto: finalAnswers.impacto,
+        inversion: finalAnswers.inversion,
+        device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+        utm_source: utmParams.utm_source || 'direct',
+      });
+    } catch (e) {
+      console.error('[Analytics] Failed to track completion:', e);
+    }
   };
 
   // ============================================
   // SAVE LEAD TO FIRESTORE
   // ============================================
-  const saveLead = async (data, result, readableAnswers, agentMessage) => {
+  const saveLead = async (data, result, readableAnswers, agentMessage, ghlResult) => {
     try {
       const totalTime = quizStartTime.current ? Math.round((Date.now() - quizStartTime.current) / 1000) : 0;
 
@@ -525,6 +692,9 @@ const HospitalCapilarQuiz = () => {
           landing_url: window.location.href,
         },
 
+        // GHL sync status (backup tracking)
+        ghl: ghlResult || { status: 'unknown' },
+
         // Metadata
         status: 'new',
         createdAt: serverTimestamp(),
@@ -556,73 +726,122 @@ const HospitalCapilarQuiz = () => {
   // ============================================
   // GHL SYNC
   // ============================================
-  const sendToGoHighLevel = async (data, result, agentMessage) => {
-    const apiKey = import.meta.env.VITE_GHL_API_KEY;
-    const locationId = import.meta.env.VITE_GHL_LOCATION_ID;
-    if (!apiKey || !locationId) return;
+
+  // Calculate perfil A/B/C from score + frame
+  const calculatePerfil = (score, frame) => {
+    if (frame === 'DERIVACION') return null;
+    if (score >= 60 && ['FRAME_A', 'FRAME_C'].includes(frame)) return 'A';
+    if (score >= 35) return 'B';
+    return 'C';
+  };
+
+  const sendToGoHighLevel = async (data, result, agentMessage, quizAnswersText) => {
+    const locationId = import.meta.env.VITE_GHL_LOCATION_ID || 'U4SBRYIlQtGBDHLFwEUf';
 
     const nameParts = (data.nombre || '').trim().split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
 
-    // Build source tag from UTMs
-    const sourceTag = utmParams.utm_source
-      ? `src-${utmParams.utm_source}`
-      : 'src-direct';
-    const campaignTag = utmParams.utm_campaign
-      ? `camp-${utmParams.utm_campaign}`
-      : null;
+    const ciudadMap = {
+      madrid: 'Madrid', murcia: 'Murcia', pontevedra: 'Pontevedra',
+      acoruna: 'A Coruña', mostoles: 'Mostoles', albacete: 'Albacete',
+      valladolid: 'Valladolid', burgos: 'Burgos', valencia: 'Valencia', otra: 'Otra ciudad'
+    };
+
+    const perfil = calculatePerfil(result.score, result.frame);
+
+    // GHL Custom Field IDs
+    const CF = {
+      lead_score:    'xjjy1LDaC6cJJyFRS2b4',
+      perfil_lead:   'ucfUcOSm5mQ9CRtCrcck',
+      ecp:           '7GWpUzewyhIoa6P1Qs6R',
+      frame:         '03XFlMTPdKLRThRfv56E',
+      door:          'DhvEpTIS2GaHtCL9GuHT',
+      agent_message: 'b3c4PXftlQRi8zgDqRce',
+      utm_source:    'MisB9YJJAH7cnh8JOtQn',
+      utm_medium:    'R1bYotBnI7wSIjENDEoE',
+      utm_campaign:  '3fUI7GO9o7oZ7ddMNnFf',
+      utm_content:   'dydSaUSYbb5R7nYOboLq',
+      utm_term:      'eLdhsOthmyD38al527tG',
+      sexo:          'clOkAKZvg8DWVrVGxA2I',
+      nicho:         'ZDXPg9bpCU3LSrUVRjnw',
+      flow_version:  'rVvXjLC8WOXr99rmlHno',
+    };
+
+    // Build custom fields array
+    const customFields = [
+      { id: CF.lead_score, field_value: result.score },
+      { id: CF.ecp, field_value: result.ecp },
+      { id: CF.frame, field_value: result.frame },
+      { id: CF.door, field_value: 'quiz_corto' },
+      { id: CF.agent_message, field_value: agentMessage || '' },
+      { id: CF.sexo, field_value: data.sexo || '' },
+      { id: CF.flow_version, field_value: 'v2' },
+    ];
+
+    if (perfil) {
+      customFields.push({ id: CF.perfil_lead, field_value: perfil });
+    }
+
+    // UTMs as custom fields
+    if (utmParams.utm_source) customFields.push({ id: CF.utm_source, field_value: utmParams.utm_source });
+    if (utmParams.utm_medium) customFields.push({ id: CF.utm_medium, field_value: utmParams.utm_medium });
+    if (utmParams.utm_campaign) customFields.push({ id: CF.utm_campaign, field_value: utmParams.utm_campaign });
+    if (utmParams.utm_content) customFields.push({ id: CF.utm_content, field_value: utmParams.utm_content });
+    if (utmParams.utm_term) customFields.push({ id: CF.utm_term, field_value: utmParams.utm_term });
+
+    // Nicho from prop (route-based) or URL param
+    const nichoValue = nicho || new URLSearchParams(window.location.search).get('nicho');
+    if (nichoValue) {
+      customFields.push({ id: CF.nicho, field_value: nichoValue });
+    }
+
+    // Tags: only meaningful action labels
+    const tags = ['quiz-completed'];
+    if (perfil) tags.push(`perfil-${perfil}`);
+    if (result.score >= 60) tags.push('hot-lead');
+    if (result.frame === 'WAITLIST') tags.push('waitlist');
+    if (result.frame === 'DERIVACION') tags.push('derivacion');
+
+    const payload = {
+      locationId,
+      firstName,
+      lastName,
+      email: data.email || '',
+      phone: data.telefono || '',
+      gender: data.sexo === 'hombre' ? 'male' : data.sexo === 'mujer' ? 'female' : '',
+      city: ciudadMap[data.ubicacion] || data.ubicacion || '',
+      country: 'Spain',
+      tags,
+      source: utmParams.utm_source
+        ? `Quiz HC - ${utmParams.utm_source}/${utmParams.utm_medium || ''}`
+        : 'Quiz Hospital Capilar',
+      customFields,
+      _agentMessage: agentMessage || '',
+      _quizAnswers: quizAnswersText || '',
+      _leadScore: result.score,
+      _frame: result.frame,
+    };
+
+    console.log('[GHL] Sending payload:', JSON.stringify(payload));
 
     try {
-      await fetch('https://services.leadconnectorhq.com/contacts/', {
+      const response = await fetch('/.netlify/functions/ghl-proxy', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': 'application/json',
-          'Version': '2021-07-28',
-        },
-        body: JSON.stringify({
-          locationId,
-          firstName,
-          lastName,
-          email: data.email || '',
-          phone: data.telefono || '',
-          tags: [result.ecp, result.frame, `score-${result.score}`, sourceTag, campaignTag].filter(Boolean),
-          source: utmParams.utm_source
-            ? `Quiz HC — ${utmParams.utm_source}/${utmParams.utm_medium || ''}`
-            : 'Quiz Hospital Capilar',
-          customFields: [
-            { key: 'ecp', field_value: result.ecp },
-            { key: 'lead_score', field_value: String(result.score) },
-            { key: 'frame', field_value: result.frame },
-            { key: 'ubicacion', field_value: data.ubicacion || '' },
-            { key: 'sexo', field_value: data.sexo || '' },
-            { key: 'edad', field_value: data.edad || '' },
-            { key: 'problema', field_value: data.problema || '' },
-            { key: 'tiempo', field_value: data.tiempo || '' },
-            { key: 'probado', field_value: (data.probado || []).join(', ') },
-            { key: 'impacto', field_value: data.impacto || '' },
-            { key: 'conocimiento', field_value: data.conocimiento || '' },
-            { key: 'motivacion', field_value: data.motivacion || '' },
-            { key: 'efectos', field_value: data.efectos || '' },
-            { key: 'profesional', field_value: data.profesional || '' },
-            { key: 'expectativa', field_value: data.expectativa || '' },
-            { key: 'inversion', field_value: data.inversion || '' },
-            { key: 'formato', field_value: data.formato || '' },
-            { key: 'condicion', field_value: (data.condicion || []).join(', ') },
-            { key: 'cirugia_lugar', field_value: data.cirugia_lugar || '' },
-            { key: 'clinica_previa', field_value: data.clinica_previa || '' },
-            { key: 'utm_source', field_value: utmParams.utm_source || '' },
-            { key: 'utm_medium', field_value: utmParams.utm_medium || '' },
-            { key: 'utm_campaign', field_value: utmParams.utm_campaign || '' },
-            { key: 'utm_content', field_value: utmParams.utm_content || '' },
-            { key: 'utm_term', field_value: utmParams.utm_term || '' },
-          ],
-          notes: agentMessage,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
+      const responseData = await response.json();
+      console.log('[GHL] Response:', response.status, responseData);
+      return {
+        status: response.ok ? 'ok' : 'error',
+        httpStatus: response.status,
+        contactId: responseData.contactId || null,
+        oppError: responseData.oppError || null,
+      };
     } catch (err) {
-      console.error('GHL sync error:', err);
+      console.error('[GHL] Sync error:', err);
+      return { status: 'error', error: err.message };
     }
   };
 
@@ -729,13 +948,26 @@ const HospitalCapilarQuiz = () => {
   useEffect(() => {
     if (stepIndex >= 0 && stepIndex < activeQuestions.length) {
       const q = activeQuestions[stepIndex];
-      analytics.trackEvent('question_viewed', {
-        question_id: q.id,
-        question_index: stepIndex,
-        total_questions: activeQuestions.length,
+      const progressPct = Math.round((stepIndex / activeQuestions.length) * 100);
+      const timeInQuiz = quizStartTime.current ? Math.round((Date.now() - quizStartTime.current) / 1000) : 0;
+      analytics.trackEvent('screen_viewed', {
+        screen_type: q.type === 'form' ? 'contact_form' : 'question',
+        screen_id: q.id,
+        screen_index: stepIndex,
+        total_screens: activeQuestions.length,
         block: q.block,
+        progress_pct: progressPct,
+        time_in_quiz_seconds: timeInQuiz,
       });
       questionStartTime.current = Date.now();
+    } else if (stepIndex === activeQuestions.length && finalResult) {
+      analytics.trackEvent('screen_viewed', {
+        screen_type: 'results',
+        screen_id: 'results',
+        frame: finalResult.frame,
+        ecp: finalResult.ecp,
+        score: finalResult.score,
+      });
     }
   }, [stepIndex]);
 
@@ -758,10 +990,7 @@ const HospitalCapilarQuiz = () => {
     return (
       <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col items-center justify-center p-6 relative">
         <div className="absolute top-0 left-0 w-full h-1.5" style={{ backgroundColor: theme.primary }}></div>
-        <div className="font-bold text-2xl tracking-tight text-gray-800 flex items-center gap-2 mb-12">
-          <div className="w-8 h-8 rounded-full" style={{ backgroundColor: theme.primary }}></div>
-          HOSPITAL<span style={{ color: theme.primary }}>CAPILAR</span>
-        </div>
+        <img src="/logo-hc.svg" alt="Hospital Capilar" className="h-14 mb-12" />
         <div className="max-w-xl text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
             ¡Hola de nuevo, {returningLead.nombre.split(' ')[0]}!
@@ -791,26 +1020,39 @@ const HospitalCapilarQuiz = () => {
 
   // PANTALLA INTRO
   if (stepIndex === -1) {
+    const nichoWelcome = nicho ? NICHO_WELCOME[nicho] : null;
+    const badgeText = nichoWelcome?.badge || 'Experiencia Diagnóstica Online';
+    const headlineMain = nichoWelcome?.headline || 'Descubre si tu caso es';
+    const headlineAccent = nichoWelcome?.headlineAccent || 'tratable o quirúrgico';
+    const subText = nichoWelcome?.subheadline || 'Responde a este diagnóstico interactivo (3-4 min). Nuestro sistema evaluará tu nivel de caída y definirá un pre-diagnóstico preciso.';
+    const ctaText = nichoWelcome?.cta || 'Iniciar Pre-Diagnóstico';
+
     return (
       <div className="min-h-screen bg-white font-sans text-gray-800 flex flex-col items-center justify-center p-6 relative">
         <div className="absolute top-0 left-0 w-full h-1.5" style={{ backgroundColor: theme.primary }}></div>
-        <div className="font-bold text-2xl tracking-tight text-gray-800 flex items-center gap-2 mb-12">
-          <div className="w-8 h-8 rounded-full" style={{ backgroundColor: theme.primary }}></div>
-          HOSPITAL<span style={{ color: theme.primary }}>CAPILAR</span>
-        </div>
+        <img src="/logo-hc.svg" alt="Hospital Capilar" className="h-14 mb-12" />
         <div className="max-w-xl text-center">
           <div className="bg-[#E6F0F0] text-[#2E4C4C] px-4 py-1.5 rounded-full text-sm font-bold mb-6 inline-flex items-center gap-2">
-            <Stethoscope size={16} /> Experiencia Diagnóstica Online
+            <Stethoscope size={16} /> {badgeText}
           </div>
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
-            Descubre si tu caso es <br/>
-            <span style={{ color: theme.primary }}>tratable o quirúrgico</span>
+            {headlineMain} <br/>
+            <span style={{ color: theme.primary }}>{headlineAccent}</span>
           </h1>
           <p className="text-lg text-gray-500 mb-10 leading-relaxed">
-            Responde a este diagnóstico interactivo (3-4 min). Nuestro sistema evaluará tu nivel de caída y definirá un pre-diagnóstico preciso.
+            {subText}
           </p>
           <button
             onClick={() => {
+              analytics.trackEvent('screen_viewed', {
+                screen_type: 'welcome',
+                screen_id: 'welcome',
+                nicho: nicho || 'generic',
+                device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+                utm_source: utmParams.utm_source || 'direct',
+                utm_medium: utmParams.utm_medium || '',
+                utm_campaign: utmParams.utm_campaign || '',
+              });
               setStepIndex(0);
               quizStartTime.current = Date.now();
               questionStartTime.current = Date.now();
@@ -819,8 +1061,9 @@ const HospitalCapilarQuiz = () => {
             className="w-full md:w-auto px-12 py-4 rounded-xl text-white font-bold text-lg shadow-lg hover:-translate-y-1 transition-transform"
             style={{ backgroundColor: theme.primary }}
           >
-            Iniciar Pre-Diagnóstico
+            {ctaText}
           </button>
+          <p className="text-sm text-gray-400 mt-4">3-4 minutos | 100% confidencial | Sin compromiso</p>
         </div>
       </div>
     );
@@ -868,42 +1111,42 @@ const HospitalCapilarQuiz = () => {
           <div className="prose prose-emerald max-w-none mb-10 bg-gray-50 p-6 rounded-2xl border border-gray-100">
             <h3 className="text-lg font-bold text-[#4CA994] mb-3 uppercase tracking-wide text-sm">Tu Perfil Capilar</h3>
 
-            {ecp === 'ECP1' && (
+            {ecp === 'Hombre con caida sin diagnostico' && (
               <>
                 <p className="text-gray-700 leading-relaxed mb-4">Llevas <strong>{strTiempo.toLowerCase()}</strong> tratando tu caída capilar con {arrProbado.toLowerCase()} sin los resultados que esperabas.</p>
                 <p className="text-gray-700 leading-relaxed mb-4">Esto es más común de lo que piensas — el 40-60% de personas no responden a minoxidil. Y en muchos casos, el problema no es el producto sino que <strong>nunca se diagnosticó correctamente la causa de tu caída</strong>. Sin una tricoscopía y analítica hormonal, cualquier tratamiento es una apuesta.</p>
                 <p className="text-gray-700 leading-relaxed font-medium"><strong>Te recomendamos:</strong> Un diagnóstico integral presencial donde nuestro equipo médico evalúa tu caso con microscopio capilar + analítica completa + valoración médica personalizada. En 30 minutos sabrás exactamente qué tienes y qué opciones reales hay.</p>
               </>
             )}
-            {ecp === 'ECP2' && (
+            {ecp === 'Mujer con caida hormonal' && (
               <>
                 <p className="text-gray-700 leading-relaxed mb-4">Tu caída de pelo está probablemente conectada a un <strong>desbalance hormonal</strong> que nadie ha evaluado en relación con tu pelo.</p>
                 <p className="text-gray-700 leading-relaxed mb-4">La caída femenina por causa hormonal es una de las menos diagnosticadas correctamente. Los dermatólogos tratan el pelo, los ginecólogos tratan las hormonas — pero nadie cruza ambas cosas.</p>
                 <p className="text-gray-700 leading-relaxed font-medium"><strong>Te recomendamos:</strong> Una consulta diagnóstica que incluye analítica hormonal completa cruzada con un estudio capilar con microscopio. Es la pieza que falta entre tu pelo y tu salud.</p>
               </>
             )}
-            {ecp === 'ECP3' && (
+            {ecp === 'Joven con alopecia temprana' && (
               <>
                 <p className="text-gray-700 leading-relaxed mb-4">Estás empezando a notar señales de caída y quieres saber si es momento de actuar o de esperar.</p>
                 <p className="text-gray-700 leading-relaxed mb-4">Buena noticia: <strong>actuar temprano es la mejor decisión que puedes tomar</strong> con la alopecia. Cuanto antes se diagnostica, más opciones tienes y mejores resultados se consiguen. Mala noticia: la caída capilar NO se frena sola. Si llevas {strTiempo.toLowerCase()} notándolo, es probable que progrese.</p>
                 <p className="text-gray-700 leading-relaxed font-medium"><strong>Te recomendamos:</strong> Hablar con nuestro equipo para entender tu caso concreto. Nada de presión — solo que sepas dónde estás y qué opciones existen a tu edad.</p>
               </>
             )}
-            {ecp === 'ECP4' && (
+            {ecp === 'Mala experiencia otra clinica' && (
               <>
                 <p className="text-gray-700 leading-relaxed mb-4">Ya pasaste por una experiencia negativa en <strong>{strClinica}</strong> y entendemos que tengas dudas.</p>
                 <p className="text-gray-700 leading-relaxed mb-4">Lo primero: lo sentimos. Sabemos que hay clínicas que prometen mucho y entregan poco. No es lo que hacemos. Hospital Capilar es un centro médico especializado — no un centro estético. Aquí no hay "consultas gratuitas" que son ventas disfrazadas. Hay médicos que te diagnostican con datos y te dicen la verdad, te guste o no.</p>
                 <p className="text-gray-700 leading-relaxed font-medium"><strong>Te recomendamos:</strong> Que hables con nosotros sin compromiso. Preferimos que nos preguntes todo lo que necesites antes de tomar cualquier decisión.</p>
               </>
             )}
-            {ecp === 'ECP5' && (
+            {ecp === 'Post-trasplante mantenimiento' && (
               <>
                 <p className="text-gray-700 leading-relaxed mb-4">Te realizaste un trasplante capilar ({strCirugiaLugar}) y necesitas un plan para proteger tu inversión.</p>
                 <p className="text-gray-700 leading-relaxed mb-4">Un trasplante capilar sin plan de mantenimiento pierde resultados con el tiempo. El pelo trasplantado no se cae, pero <strong>el pelo nativo sigue sometido a los mismos factores</strong> que causaron la caída original.</p>
                 <p className="text-gray-700 leading-relaxed font-medium"><strong>Te recomendamos:</strong> Un diagnóstico para evaluar el estado actual de tu pelo nativo y diseñar un plan de mantenimiento personalizado que proteja los resultados de tu cirugía.</p>
               </>
             )}
-            {ecp === 'ECP6' && (
+            {ecp === 'Caida postparto' && (
               <>
                 <p className="text-gray-700 leading-relaxed mb-4">Estás perdiendo pelo desde tu embarazo o parto y necesitas saber si es temporal o algo más.</p>
                 <p className="text-gray-700 leading-relaxed mb-4">El efluvio postparto afecta al 50% de madres y en la mayoría de casos es temporal. Pero en algunas mujeres, <strong>el embarazo revela una alopecia subyacente (AGA)</strong> que estaba oculta y necesita tratamiento.</p>

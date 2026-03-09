@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PreviewIsland from '../../components/PreviewIsland.jsx';
+
+const { slug } = Astro.params;
+---
+
+<BaseLayout title={`Preview - Hospital Capilar`}>
+  <PreviewIsland client:only="react" slug={slug} />
+</BaseLayout>

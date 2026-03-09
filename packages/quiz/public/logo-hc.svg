@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100" fill="none">
+  <!-- Left circle - concentric rings -->
+  <circle cx="100" cy="28" r="18" stroke="#6BA89E" stroke-width="3" fill="none"/>
+  <circle cx="100" cy="28" r="10" stroke="#6BA89E" stroke-width="2.5" fill="none"/>
+  <circle cx="100" cy="28" r="3" fill="#6BA89E"/>
+
+  <!-- Middle circle - concentric rings -->
+  <circle cx="140" cy="28" r="18" stroke="#6BA89E" stroke-width="3" fill="none"/>
+  <circle cx="140" cy="28" r="10" stroke="#6BA89E" stroke-width="2.5" fill="none"/>
+  <circle cx="140" cy="28" r="3" fill="#6BA89E"/>
+
+  <!-- Right circle - solid -->
+  <circle cx="180" cy="28" r="18" fill="#6BA89E"/>
+
+  <!-- HOSPITAL text -->
+  <text x="140" y="72" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="400" letter-spacing="2">
+    <tspan fill="#6BA89E">HOSPITAL</tspan><tspan fill="#2C3E50" font-weight="700">CAPILAR</tspan>
+  </text>
+</svg>

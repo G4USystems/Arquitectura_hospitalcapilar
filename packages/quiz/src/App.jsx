@@ -19,13 +19,21 @@ function PreviewPage() {
 function App() {
   return (
     <Routes>
-      {/* Hospital Capilar Quiz */}
+      {/* Hospital Capilar Quiz — generic */}
       <Route path="/" element={<HospitalCapilarQuiz />} />
 
-      {/* Preview mode - accessible before publishing */}
+      {/* Niche quiz — direct start, no landing page */}
+      <Route path="/mujeres" element={<HospitalCapilarQuiz nicho="mujeres" />} />
+      <Route path="/jovenes" element={<HospitalCapilarQuiz nicho="jovenes" />} />
+      <Route path="/hombres-caida" element={<HospitalCapilarQuiz nicho="hombres-caida" />} />
+      <Route path="/segunda-opinion" element={<HospitalCapilarQuiz nicho="segunda-opinion" />} />
+      <Route path="/post-trasplante" element={<HospitalCapilarQuiz nicho="post-trasplante" />} />
+      <Route path="/postparto" element={<HospitalCapilarQuiz nicho="postparto" />} />
+
+      {/* Preview mode */}
       <Route path="/preview/:slug" element={<PreviewPage />} />
 
-      {/* Dynamic quizzes loaded from Firestore */}
+      {/* Dynamic quizzes from Firestore */}
       <Route path="/q/:slug" element={<DynamicQuizPage />} />
     </Routes>
   )

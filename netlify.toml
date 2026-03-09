@@ -1,24 +1,24 @@
 # =============================================
-# Hospital Capilar Platform - Netlify Configuration
-# Single site: Quiz at / and Dashboard at /dashboard/
+# Hospital Capilar — Quiz Netlify Configuration
 # =============================================
 
 [build]
   base = "."
-  command = "cd packages/shared && npm install && cd ../quiz && npm install && npm run build && cd ../dashboard && npm install && VITE_BASE_PATH=/dashboard/ npm run build && mkdir -p ../quiz/dist/dashboard && cp -r dist/* ../quiz/dist/dashboard/"
+  command = "cd packages/shared && npm install && cd ../quiz && npm install && npm run build"
   publish = "packages/quiz/dist"
 
 [build.environment]
   NODE_VERSION = "20"
 
-# Dashboard SPA - must come BEFORE the catch-all
+# PostHog reverse proxy — bypasses adblockers
 [[redirects]]
-  from = "/dashboard/*"
-  to = "/dashboard/index.html"
+  from = "/ingest/static/*"
+  to = "https://eu-assets.i.posthog.com/static/:splat"
   status = 200
+  force = true
 
-# Quiz SPA - catch-all
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/ingest/*"
+  to = "https://eu.i.posthog.com/:splat"
   status = 200
+  force = true

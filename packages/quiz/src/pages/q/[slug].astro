@@ -1,0 +1,12 @@
+---
+export const prerender = false;
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import RendererIsland from '../../components/RendererIsland.jsx';
+
+const { slug } = Astro.params;
+---
+
+<BaseLayout title={`Quiz - Hospital Capilar`}>
+  <RendererIsland client:only="react" slug={slug} />
+</BaseLayout>
