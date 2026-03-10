@@ -42,12 +42,10 @@ exports.handler = async (event) => {
     // Extract extra fields before sending to GHL contacts API
     const agentMessage = body._agentMessage || '';
     const quizAnswers = body._quizAnswers || '';
-    const leadScore = body._leadScore || 0;
-    const frame = body._frame || '';
+    const contactScore = body._contactScore || '';
     delete body._agentMessage;
     delete body._quizAnswers;
-    delete body._leadScore;
-    delete body._frame;
+    delete body._contactScore;
 
     // 1. Create or update contact
     const contactRes = await fetch(`${GHL_BASE}/contacts/`, {
@@ -66,17 +64,19 @@ exports.handler = async (event) => {
     let noteData = null;
     let oppError = null;
     if (contactId) {
-      // Determine lead priority from score and frame
+      // Determine lead_priority from contact_score
+      // HOT: contact_score=HIGH
+      // WARM: contact_score=NORMAL
+      // COLD: contact_score=OUT
       let priority = 'WARM';
-      if (leadScore >= 60 && ['FRAME_A', 'FRAME_C'].includes(frame)) priority = 'HOT';
-      else if (frame === 'WAITLIST') priority = 'GEOGRAPHIC_OUT';
-      else if (frame === 'DERIVACION' || leadScore < 30) priority = 'COLD';
+      if (contactScore === 'HIGH') priority = 'HOT';
+      else if (contactScore === 'OUT') priority = 'COLD';
 
       // Step A: Create opportunity (custom fields don't work on POST)
       const oppPayload = {
         pipelineId: PIPELINE_ID,
         locationId: body.locationId,
-        name: `Quiz Lead - ${body.firstName || ''} ${body.lastName || ''}`.trim(),
+        name: `Lead - ${body.firstName || ''} ${body.lastName || ''}`.trim(),
         pipelineStageId: STAGE_NEW_LEAD,
         contactId,
         status: 'open',
