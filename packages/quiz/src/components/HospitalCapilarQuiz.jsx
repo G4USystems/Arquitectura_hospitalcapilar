@@ -755,7 +755,8 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
     'Caida postparto',
   ];
 
-  const STRIPE_CHECKOUT_URL = '#stripe-placeholder'; // TODO: replace with real Stripe link
+  const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/8x2fZh6Qx6wxeES75tbAs04'; // Bono consulta diagnóstica 195€
+  const STRIPE_CHECKOUT_70 = 'https://buy.stripe.com/28E4gz6QxbQR54i0H5bAs05'; // Bono 70€
 
   const getCTAConfig = (ecp, perfil, frame) => {
     // DERIVACION — artículo educativo
