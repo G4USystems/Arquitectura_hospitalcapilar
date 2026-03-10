@@ -695,6 +695,8 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
           utm_campaign: utmParams.utm_campaign || null,
           utm_content: utmParams.utm_content || null,
           utm_term: utmParams.utm_term || null,
+          fbclid: utmParams.fbclid || null,
+          gclid: utmParams.gclid || null,
           referrer: document.referrer || 'direct',
           landing_url: window.location.href,
         },
@@ -900,6 +902,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
     if (utmParams.utm_campaign) customFields.push({ id: CF.utm_campaign, field_value: utmParams.utm_campaign });
     if (utmParams.utm_content) customFields.push({ id: CF.utm_content, field_value: utmParams.utm_content });
     if (utmParams.utm_term) customFields.push({ id: CF.utm_term, field_value: utmParams.utm_term });
+    // TODO: Add GHL custom field IDs for fbclid and gclid when created in GHL
 
     // Tags: solo new_lead para activar workflows
     const tags = ['new_lead'];

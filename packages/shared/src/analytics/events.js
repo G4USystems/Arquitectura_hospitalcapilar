@@ -102,5 +102,7 @@ export const getUTMParams = () => {
     utm_campaign: urlParams.get('utm_campaign') || undefined,
     utm_content: urlParams.get('utm_content') || undefined,
     utm_term: urlParams.get('utm_term') || undefined,
+    fbclid: urlParams.get('fbclid') || undefined,
+    gclid: urlParams.get('gclid') || undefined,
   };
 };

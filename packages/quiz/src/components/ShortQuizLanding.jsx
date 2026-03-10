@@ -172,6 +172,7 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
     if (utmParams.utm_campaign) customFields.push({ id: CF.utm_campaign, field_value: utmParams.utm_campaign });
     if (utmParams.utm_content) customFields.push({ id: CF.utm_content, field_value: utmParams.utm_content });
     if (utmParams.utm_term) customFields.push({ id: CF.utm_term, field_value: utmParams.utm_term });
+    // TODO: Add GHL custom field IDs for fbclid and gclid when created in GHL
 
     const payload = {
       locationId: import.meta.env.VITE_GHL_LOCATION_ID || 'U4SBRYIlQtGBDHLFwEUf',
@@ -214,7 +215,9 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
         source: {
           channel: sourceChannel,
           utm_source: utmParams.utm_source || null, utm_medium: utmParams.utm_medium || null,
-          utm_campaign: utmParams.utm_campaign || null, referrer: document.referrer || 'direct',
+          utm_campaign: utmParams.utm_campaign || null,
+          fbclid: utmParams.fbclid || null, gclid: utmParams.gclid || null,
+          referrer: document.referrer || 'direct',
           landing_url: window.location.href, door: 'quiz_corto',
         },
         ghl: ghlResult, status: 'new', createdAt: serverTimestamp(),
@@ -262,7 +265,7 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
 
     // Readable labels for what the user answered
     const situacionLabels = {
-      'caida-sin-diagnostico': 'Caída sin diagnóstico',
+      'caida-sin-diagnostico': answers.sexo === 'mujer' ? 'Pierdo densidad / se me cae mucho' : 'Caída sin diagnóstico',
       'entradas-coronilla': 'Entradas / coronilla',
       'joven-perdida': 'Pérdida temprana de pelo',
       'postparto': 'Caída desde embarazo/parto',
@@ -449,16 +452,21 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
                 <h2 className="text-xl font-bold text-gray-900 mb-1 leading-tight">¿Qué describe mejor tu situación?</h2>
               </div>
               <div className="grid gap-2">
-                {[
-                  { label: 'Se me cae el pelo y no sé por qué', value: 'caida-sin-diagnostico' },
-                  { label: 'Noto las entradas / la coronilla', value: 'entradas-coronilla' },
-                  { label: 'Soy joven y ya estoy perdiendo pelo', value: 'joven-perdida' },
+                {(answers.sexo === 'mujer' ? [
+                  { label: 'Pierdo densidad / se me cae mucho', value: 'caida-sin-diagnostico' },
                   { label: 'Pierdo pelo desde el embarazo/parto', value: 'postparto' },
                   { label: 'Creo que mi caída es hormonal', value: 'hormonal' },
                   { label: 'Ya me operé pero sigo perdiendo', value: 'post-cirugia' },
                   { label: 'Tuve mala experiencia en otra clínica', value: 'mala-experiencia' },
                   { label: 'Problemas en el cuero cabelludo', value: 'cuero-cabelludo' },
-                ].map((opt, i) => (
+                ] : [
+                  { label: 'Se me cae el pelo y no sé por qué', value: 'caida-sin-diagnostico' },
+                  { label: 'Noto las entradas / la coronilla', value: 'entradas-coronilla' },
+                  { label: 'Soy joven y ya estoy perdiendo pelo', value: 'joven-perdida' },
+                  { label: 'Ya me operé pero sigo perdiendo', value: 'post-cirugia' },
+                  { label: 'Tuve mala experiencia en otra clínica', value: 'mala-experiencia' },
+                  { label: 'Problemas en el cuero cabelludo', value: 'cuero-cabelludo' },
+                ]).map((opt, i) => (
                   <button
                     key={i}
                     onClick={() => handleSelect('situacion', opt.value)}
