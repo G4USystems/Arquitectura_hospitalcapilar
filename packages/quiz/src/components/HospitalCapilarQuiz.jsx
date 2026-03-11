@@ -204,13 +204,14 @@ const NICHO_WELCOME = {
 // ============================================
 const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
   const [stepIndex, setStepIndex] = useState(skipIntro ? 0 : -1);
-  const [answers, setAnswers] = useState({ probado: [], condicion: [] });
+  const [answers, setAnswers] = useState({ probado: [], condicion: [], consentPrivacidad: false, consentComunicaciones: false });
   const [showMicroTip, setShowMicroTip] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [finalResult, setFinalResult] = useState(null);
   const [returningLead, setReturningLead] = useState(null);
   const [utmParams] = useState(() => getUTMParams());
+  const ghlContactIdRef = useRef(null);
 
   // Analytics
   const analytics = useAnalytics();
@@ -613,6 +614,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       let ghlResult = { status: 'pending' };
       try {
         ghlResult = await sendToGoHighLevel(finalAnswers, result, agentMessage, quizAnswersText);
+        if (ghlResult.contactId) ghlContactIdRef.current = ghlResult.contactId;
       } catch (e) {
         ghlResult = { status: 'error', error: e.message };
         console.error('[GHL] Failed to send:', e);
@@ -757,8 +759,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
     'Caida postparto',
   ];
 
-  const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/8x2fZh6Qx6wxeES75tbAs04'; // Bono consulta diagnóstica 195€
-  const STRIPE_CHECKOUT_70 = 'https://buy.stripe.com/28E4gz6QxbQR54i0H5bAs05'; // Bono 70€
+  const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/8x2fZh6Qx6wxeES75tbAs04'; // Fallback — Payment Link estático 195€
 
   const getCTAConfig = (ecp, perfil, frame) => {
     // DERIVACION — artículo educativo
@@ -831,7 +832,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       // Perfil A o B → cobrar bono 195€ (filtrar + cubrir diagnóstico)
       return {
         primary: { type: 'pagar_bono', label: 'Reserva tu Diagnóstico — 195€', icon: 'Calendar', style: 'primary', badge: 'DIAGNÓSTICO COMPLETO' },
-        secondary: { type: 'whatsapp', label: 'Escríbenos por WhatsApp', icon: 'WhatsApp', style: 'text' },
+        secondary: { type: 'solicitar_llamada', label: '¿Dudas? Te llamamos sin compromiso', icon: 'PhoneCall', style: 'text' },
         heading: 'Tu caso necesita un diagnóstico especializado',
         description: 'La consulta incluye tricoscopía digital + analítica hormonal completa + plan de tratamiento personalizado. En 30 minutos tendrás respuestas.',
       };
@@ -870,6 +871,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       agent_message_contact:   '5voFSSQP0yBFa8VdLuzY',
       contact_score:           'SGT17lKk7bZgkInBTtrT',
       consent:                 'x2QNuqJqst8Oy8H6pV0G',
+      ubicacion_clinica:       'LygjPVQnLbqqdL4eqQwT',
       // UTMs
       utm_source:              'MisB9YJJAH7cnh8JOtQn',
       utm_medium:              'vykx7m6bcfbYMXRqToYP',
@@ -894,6 +896,8 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       { id: CF.ecp, field_value: result.ecp },
       { id: CF.agent_message_contact, field_value: agentMessage || '' },
       { id: CF.contact_score, field_value: contactScore },
+      { id: CF.ubicacion_clinica, field_value: data.ubicacion || '' },
+      { id: CF.consent, field_value: data.consentPrivacidad ? `privacidad:si|comunicaciones:${data.consentComunicaciones ? 'si' : 'no'}` : '' },
     ];
 
     // UTMs
@@ -1436,10 +1440,31 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
             );
             const waUrl = `https://wa.me/${WA_PHONE}?text=${waText}`;
 
-            const handlePrimaryClick = () => {
+            const handlePrimaryClick = async () => {
               handleCTAClick(cta.primary.type);
               if (cta.primary.type === 'pagar_bono') {
-                window.open(STRIPE_CHECKOUT_URL, '_blank');
+                try {
+                  const res = await fetch('/.netlify/functions/stripe-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      email: answers.email || '',
+                      nombre: answers.nombre || nombre || '',
+                      contactId: ghlContactIdRef.current || '',
+                      ecp: finalResult?.ecp || '',
+                    }),
+                  });
+                  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                  const data = await res.json();
+                  if (data.url && data.url.startsWith('https://')) {
+                    window.location.href = data.url;
+                  } else {
+                    window.open(STRIPE_CHECKOUT_URL, '_blank');
+                  }
+                } catch (err) {
+                  console.error('[Stripe] Checkout error, using fallback:', err);
+                  window.open(STRIPE_CHECKOUT_URL, '_blank');
+                }
               }
             };
 
@@ -1656,6 +1681,18 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
                   <option value="otra">Otra ciudad</option>
                 </select>
               </div>
+              <div className="space-y-2 mt-3">
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" checked={answers.consentPrivacidad || false} onChange={e => setAnswers({...answers, consentPrivacidad: e.target.checked})}
+                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#4CA994] focus:ring-[#4CA994]" />
+                  <span className="text-xs text-gray-500">Acepto la <a href="https://hospitalcapilar.com/politica-de-privacidad" target="_blank" rel="noopener noreferrer" className="underline" style={{ color: theme.primary }}>política de privacidad</a> <span className="text-red-500">*</span></span>
+                </label>
+                <label className="flex items-start gap-2 cursor-pointer">
+                  <input type="checkbox" checked={answers.consentComunicaciones || false} onChange={e => setAnswers({...answers, consentComunicaciones: e.target.checked})}
+                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#4CA994] focus:ring-[#4CA994]" />
+                  <span className="text-xs text-gray-500">Acepto recibir comunicaciones sobre tratamientos capilares</span>
+                </label>
+              </div>
               <button
                 onClick={() => {
                   analytics.trackEvent('form_submitted', {
@@ -1669,15 +1706,12 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
                   }
                   startAnalysis();
                 }}
-                disabled={!answers.ubicacion || !answers.nombre || !answers.email || !answers.telefono}
+                disabled={!answers.ubicacion || !answers.nombre || !answers.email || !answers.telefono || !answers.consentPrivacidad}
                 className="w-full py-3.5 rounded-xl text-white font-bold text-base shadow-lg mt-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 style={{ backgroundColor: theme.primary }}
               >
                 Ver mi diagnóstico <ChevronRight size={18} />
               </button>
-              <p className="text-xs text-center text-gray-400 mt-3 px-4">
-                Acepto la política de privacidad. Tus datos están protegidos y solo se usarán para enviarte el pre-diagnóstico capilar.
-              </p>
             </div>
           </div>
         )}
