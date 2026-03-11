@@ -1222,6 +1222,31 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       );
     }
 
+    const fallbackToRedirect = () => {
+      // Try dynamic redirect session first, then static Payment Link
+      fetch('/.netlify/functions/stripe-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: answers.email || '',
+          nombre: answers.nombre || nombre || '',
+          contactId: ghlContactIdRef.current || '',
+          ecp: finalResult?.ecp || '',
+          ubicacion: answers.ubicacion || '',
+          embedded: false,
+        }),
+      })
+        .then(r => r.ok ? r.json() : Promise.reject())
+        .then(data => {
+          if (data.url) window.location.href = data.url;
+          else window.open(`${STRIPE_CHECKOUT_URL}?prefilled_email=${encodeURIComponent(answers.email || '')}`, '_blank');
+        })
+        .catch(() => {
+          window.open(`${STRIPE_CHECKOUT_URL}?prefilled_email=${encodeURIComponent(answers.email || '')}`, '_blank');
+        });
+      setPaymentStep('paywall');
+    };
+
     const handleStartPayment = async () => {
       try {
         setPaymentStep('paying');
@@ -1237,19 +1262,22 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
             embedded: true,
           }),
         });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) {
+          console.error('[Stripe] Embedded failed:', res.status);
+          fallbackToRedirect();
+          return;
+        }
         const data = await res.json();
         if (data.clientSecret) {
           setStripeClientSecret(data.clientSecret);
+        } else if (data.url) {
+          window.location.href = data.url;
         } else {
-          // Fallback to redirect mode
-          window.open(STRIPE_CHECKOUT_URL, '_blank');
-          setPaymentStep('paywall');
+          fallbackToRedirect();
         }
       } catch (err) {
-        console.error('[Stripe] Embedded checkout error, using fallback:', err);
-        window.open(STRIPE_CHECKOUT_URL, '_blank');
-        setPaymentStep('paywall');
+        console.error('[Stripe] Embedded checkout error:', err);
+        fallbackToRedirect();
       }
     };
 
