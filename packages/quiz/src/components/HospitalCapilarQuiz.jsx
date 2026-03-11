@@ -8,7 +8,6 @@ import { getUTMParams } from '@hospital-capilar/shared/analytics';
 import { db } from '@hospital-capilar/shared/firebase';
 import { collection, addDoc, serverTimestamp, query, where, getDocs, limit } from 'firebase/firestore';
 import PaywallOverlay from './PaywallOverlay';
-import StripeCheckoutModal from './StripeCheckoutModal';
 import PaymentConfirmation from './PaymentConfirmation';
 
 const WhatsAppIcon = ({ size = 24, className = '' }) => (
@@ -216,7 +215,6 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
   const [utmParams] = useState(() => getUTMParams());
   const ghlContactIdRef = useRef(null);
   const [paymentStep, setPaymentStep] = useState(null); // null | 'paywall' | 'paying' | 'paid'
-  const [stripeClientSecret, setStripeClientSecret] = useState(null);
 
   // Analytics
   const analytics = useAnalytics();
@@ -1222,34 +1220,9 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       );
     }
 
-    const fallbackToRedirect = () => {
-      // Try dynamic redirect session first, then static Payment Link
-      fetch('/.netlify/functions/stripe-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: answers.email || '',
-          nombre: answers.nombre || nombre || '',
-          contactId: ghlContactIdRef.current || '',
-          ecp: finalResult?.ecp || '',
-          ubicacion: answers.ubicacion || '',
-          embedded: false,
-        }),
-      })
-        .then(r => r.ok ? r.json() : Promise.reject())
-        .then(data => {
-          if (data.url) window.location.href = data.url;
-          else window.open(`${STRIPE_CHECKOUT_URL}?prefilled_email=${encodeURIComponent(answers.email || '')}`, '_blank');
-        })
-        .catch(() => {
-          window.open(`${STRIPE_CHECKOUT_URL}?prefilled_email=${encodeURIComponent(answers.email || '')}`, '_blank');
-        });
-      setPaymentStep('paywall');
-    };
-
     const handleStartPayment = async () => {
+      setPaymentStep('paying');
       try {
-        setPaymentStep('paying');
         const res = await fetch('/.netlify/functions/stripe-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1259,25 +1232,18 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
             contactId: ghlContactIdRef.current || '',
             ecp: finalResult?.ecp || '',
             ubicacion: answers.ubicacion || '',
-            embedded: true,
           }),
         });
-        if (!res.ok) {
-          console.error('[Stripe] Embedded failed:', res.status);
-          fallbackToRedirect();
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
           return;
         }
-        const data = await res.json();
-        if (data.clientSecret) {
-          setStripeClientSecret(data.clientSecret);
-        } else if (data.url) {
-          window.location.href = data.url;
-        } else {
-          fallbackToRedirect();
-        }
+        throw new Error('No checkout URL');
       } catch (err) {
-        console.error('[Stripe] Embedded checkout error:', err);
-        fallbackToRedirect();
+        console.error('[Stripe] Checkout error, using fallback:', err);
+        window.location.href = `${STRIPE_CHECKOUT_URL}?prefilled_email=${encodeURIComponent(answers.email || '')}`;
       }
     };
 
@@ -1292,12 +1258,13 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
           onCallRequest={() => { setPaymentStep(null); handleCTAClick('solicitar_llamada'); }}
         />
       )}
-      {paymentStep === 'paying' && stripeClientSecret && (
-        <StripeCheckoutModal
-          clientSecret={stripeClientSecret}
-          onComplete={() => { setPaymentStep('paid'); analytics.trackEvent('payment_completed', { ecp, amount: 195 }); }}
-          onCancel={() => { setStripeClientSecret(null); setPaymentStep('paywall'); }}
-        />
+      {paymentStep === 'paying' && (
+        <div className="fixed inset-0 z-50 bg-[#F7F8FA] flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-10 h-10 border-4 border-[#4CA994] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-gray-500 text-sm">Redirigiendo al pago seguro...</p>
+          </div>
+        </div>
       )}
       <div className="min-h-screen bg-gradient-to-b from-[#2C3E50] via-[#2C3E50] to-white font-sans">
         <div className="h-1.5 w-full bg-[#4CA994]"></div>
