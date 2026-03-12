@@ -138,6 +138,22 @@ const DirectFormLanding = ({ nicho = 'hombres-caida' }) => {
       _agentMessage: agentMsg,
       _quizAnswers: '',
       _contactScore: contactScore,
+      _salesforceData: {
+        door: 'form',
+        ecp: config.ecp,
+        ubicacion: form.provincia || '',
+        consentPrivacidad: !!form.consentPrivacidad,
+        consentComunicaciones: !!form.consentComunicaciones,
+        utm_source: utmParams.utm_source || '',
+        utm_medium: utmParams.utm_medium || '',
+        utm_campaign: utmParams.utm_campaign || '',
+        utm_content: utmParams.utm_content || '',
+        utm_term: utmParams.utm_term || '',
+        fbclid: utmParams.fbclid || '',
+        gclid: utmParams.gclid || '',
+        referrer: document.referrer || '',
+        landing_url: window.location.href || '',
+      },
     };
 
     let ghlResult = { status: 'pending' };

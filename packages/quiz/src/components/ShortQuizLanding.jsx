@@ -196,6 +196,24 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
       _agentMessage: agentMsg,
       _quizAnswers: JSON.stringify(answers),
       _contactScore: contactScore,
+      _salesforceData: {
+        door: 'quiz_corto',
+        ecp,
+        sexo: answers.sexo || '',
+        tiempo: answers.tiempo || '',
+        ubicacion: form.provincia || '',
+        consentPrivacidad: !!form.consentPrivacidad,
+        consentComunicaciones: !!form.consentComunicaciones,
+        utm_source: utmParams.utm_source || '',
+        utm_medium: utmParams.utm_medium || '',
+        utm_campaign: utmParams.utm_campaign || '',
+        utm_content: utmParams.utm_content || '',
+        utm_term: utmParams.utm_term || '',
+        fbclid: utmParams.fbclid || '',
+        gclid: utmParams.gclid || '',
+        referrer: document.referrer || '',
+        landing_url: window.location.href || '',
+      },
     };
 
     let ghlResult = { status: 'pending' };

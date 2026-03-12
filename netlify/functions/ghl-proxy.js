@@ -1,4 +1,5 @@
 const GHL_BASE = 'https://services.leadconnectorhq.com';
+const SALESFORCE_URL = 'https://webto.salesforce.com/servlet/servlet.WebToLead?encoding=UTF-8&orgId=00D090000047Cb3';
 const PIPELINE_ID = 'xXCgpUIEizlqdrmGrJkg';
 const STAGE_NEW_LEAD = 'fbed92b1-5e91-4b86-820f-44b9f66f8b73';
 
@@ -7,6 +8,36 @@ const OPP_CF = {
   lead_priority:       'l99Opesqh9cJBLxSPs4z',
   agent_message:       'cVtN5KboKd2R1cf1s7QA',
   tratamiento_status:  'Hk81fRW2HaTqlry4I1L0',
+};
+
+// Salesforce Web-To-Lead field mapping
+const SF = {
+  oid:                     '00D090000047Cb3',
+  clinica_pck:             '00NbE000006pqPJ',
+  lopd_firmada:            '00N0900000CPq2F',
+  acepta_comunicaciones:   '00N0900000CPq1v',
+  g4u_id:                  '00NbE000006ougH',
+  g4u_perfil_clinico:      '00NbE000006pt3p',
+  g4u_score:               '00NbE000006psAz',
+  g4u_door:                '00NbE000006pqXP',
+  genero:                  '00N0900000CPq2O',
+  g4u_edad:                '00NbE000006pvbt',
+  g4u_problema:            '00NbE000006pvwr',
+  g4u_tiempo:              '00NbE000006pvvF',
+  g4u_probado:             '00NbE000006pvyT',
+  g4u_motivacion:          '00NbE000006ptJx',
+  g4u_formato:             '00NbE000006ptOn',
+  g4u_condicion:           '00NbE000006ptTd',
+  g4u_mensaje_comercial:   '00NbE000006ptWr',
+  g4u_utm_source:          '00NbE000006ptYT',
+  g4u_utm_medium:          '00NbE000006pta5',
+  g4u_utm_campaign:        '00NbE000006ptjl',
+  g4u_utm_content:         '00NbE000006ptob',
+  g4u_utm_term:            '00NbE000006pt8g',
+  g4u_fbclid:              '00NbE000006ptqD',
+  g4u_gclid:               '00NbE000006pttR',
+  g4u_referrer:            '00NbE000006ptv3',
+  g4u_landing_url:         '00NbE000006ptwf',
 };
 
 
@@ -43,9 +74,11 @@ exports.handler = async (event) => {
     // Extract extra fields before sending to GHL contacts API
     const agentMessage = body._agentMessage || '';
     const contactScore = body._contactScore || '';
+    const salesforceData = body._salesforceData || {};
     delete body._agentMessage;
     delete body._quizAnswers;
     delete body._contactScore;
+    delete body._salesforceData;
 
     // 1. Create or update contact
     const contactRes = await fetch(`${GHL_BASE}/contacts/`, {
@@ -151,6 +184,18 @@ exports.handler = async (event) => {
       console.log('[GHL] ERROR:', oppError);
     }
 
+    // 4. Send to Salesforce Web-To-Lead (fire-and-forget)
+    sendToSalesforce({
+      firstName: body.firstName,
+      lastName: body.lastName,
+      email: body.email,
+      phone: body.phone,
+      contactId,
+      agentMessage,
+      contactScore,
+      ...salesforceData,
+    });
+
     return {
       statusCode: contactRes.ok ? 200 : contactRes.status,
       headers,
@@ -171,3 +216,55 @@ exports.handler = async (event) => {
     };
   }
 };
+
+/**
+ * Send lead to Salesforce via Web-To-Lead POST.
+ * Fire-and-forget: does not block the GHL response.
+ */
+function sendToSalesforce(data) {
+  // Map ubicacion to Salesforce picklist values
+  const clinicaMap = { madrid: 'Madrid', murcia: 'Murcia', pontevedra: 'Pontevedra' };
+  const generoMap = { hombre: 'Masculino', mujer: 'Femenino' };
+  const formatoMap = { presencial: 'Presencial', online: 'Online', llamada: 'Llamada' };
+
+  const params = new URLSearchParams();
+  params.append('oid', SF.oid);
+  params.append('retURL', 'http://');
+  params.append('first_name', data.firstName || '');
+  params.append('last_name', data.lastName || '');
+  params.append('email', data.email || '');
+  params.append('phone', data.phone || '');
+  params.append(SF.clinica_pck, clinicaMap[data.ubicacion] || '');
+  params.append(SF.lopd_firmada, data.consentPrivacidad ? 'Sí' : 'No');
+  params.append(SF.acepta_comunicaciones, data.consentComunicaciones ? '1' : '0');
+  params.append(SF.g4u_id, data.contactId || '');
+  params.append(SF.g4u_perfil_clinico, data.ecp || '');
+  params.append(SF.g4u_score, String(data.contactScore || ''));
+  params.append(SF.g4u_door, data.door || '');
+  params.append(SF.genero, generoMap[data.sexo] || '');
+  params.append(SF.g4u_edad, data.edad || '');
+  params.append(SF.g4u_problema, data.problema || '');
+  params.append(SF.g4u_tiempo, data.tiempo || '');
+  params.append(SF.g4u_probado, Array.isArray(data.probado) ? data.probado.join(', ') : (data.probado || ''));
+  params.append(SF.g4u_motivacion, data.motivacion || '');
+  params.append(SF.g4u_formato, formatoMap[data.formato] || '');
+  params.append(SF.g4u_condicion, Array.isArray(data.condicion) ? data.condicion.join(', ') : (data.condicion || ''));
+  params.append(SF.g4u_mensaje_comercial, data.agentMessage || '');
+  params.append(SF.g4u_utm_source, data.utm_source || '');
+  params.append(SF.g4u_utm_medium, data.utm_medium || '');
+  params.append(SF.g4u_utm_campaign, data.utm_campaign || '');
+  params.append(SF.g4u_utm_content, data.utm_content || '');
+  params.append(SF.g4u_utm_term, data.utm_term || '');
+  params.append(SF.g4u_fbclid, data.fbclid || '');
+  params.append(SF.g4u_gclid, data.gclid || '');
+  params.append(SF.g4u_referrer, data.referrer || '');
+  params.append(SF.g4u_landing_url, data.landing_url || '');
+
+  fetch(SALESFORCE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: params.toString(),
+  })
+    .then(res => console.log('[Salesforce] Web-To-Lead sent, status:', res.status))
+    .catch(err => console.log('[Salesforce] Web-To-Lead failed:', err.message));
+}
