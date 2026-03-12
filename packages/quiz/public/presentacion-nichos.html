@@ -510,9 +510,8 @@
   .niche-right {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    justify-content: flex-start;
-    overflow-y: auto;
+    gap: 0;
+    justify-content: center;
   }
 
   .niche-icon {
@@ -928,7 +927,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:var(--teal-light);">👩</div>
       <h2 class="niche-name animate-in delay-1">👩 "Es Normal"</h2>
       <p class="niche-desc animate-in delay-2">
         Mujer en menopausia o perimenopausia (45-55) que nota cómo su pelo pierde densidad. Su ginecóloga le dice <em>"es normal a tu edad"</em>. <strong>4 de cada 10 mujeres</strong> experimentan pérdida capilar en esta etapa — incluyendo mujeres con SOP o cambios hormonales que llegan sin diagnóstico. Ninguna clínica se dirige a ellas directamente. El nicho de Óscar — el más desatendido del sector.
@@ -958,7 +956,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -977,26 +978,37 @@
         </div>
         <a class="meta-ad-cta" href="#">Pide tu diagnóstico gratis →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">caída pelo menopausia tratamiento</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Caída Pelo Menopausia — Diagnóstico Gratuito</div>
-          <div class="google-ad-desc">¿Tu pelo se cae más de lo normal? Diagnóstico capilar personalizado. Clínicas en Madrid, Pontevedra y Murcia.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #6BA89E, #3D9B8F);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;margin-bottom:8px;">👩‍⚕️</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Hospital Capilar</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>caída pelo menopausia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>pelo fino menopausia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>alopecia femenina menopausia</span><span style="color:#E67E22; font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>caída pelo mujer 50 años</span><span style="color:#E67E22; font-weight:700;">media</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">caída pelo menopausia tratamiento</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Caída Pelo Menopausia — Diagnóstico Gratuito</div>
+              <div class="google-ad-desc">¿Tu pelo se cae más de lo normal? Diagnóstico capilar personalizado. Clínicas en Madrid, Pontevedra y Murcia.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>caída pelo menopausia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>pelo fino menopausia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>alopecia femenina menopausia</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>caída pelo mujer 50 años</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1013,7 +1025,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:#FFF0F5;">👶</div>
       <h2 class="niche-name animate-in delay-1">👶 "Lo Que Vino Con el Bebé"</h2>
       <p class="niche-desc animate-in delay-2">
         Mujer joven (28-38) que tras el parto o cambios hormonales nota una caída brutal. Su ginecóloga le dice <em>"es normal, se recupera solo"</em>. Pero pasan 6, 8, 12 meses y <strong>no se recupera</strong>. No sabe a quién acudir — las clínicas capilares "son para hombres". Un segmento enorme y totalmente desatendido.
@@ -1043,7 +1054,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -1062,26 +1076,37 @@
         </div>
         <a class="meta-ad-cta" href="#" style="background:#FF69B4;">Pide tu diagnóstico gratis →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">caída pelo después embarazo</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Caída Pelo Postparto — Diagnóstico Gratuito</div>
-          <div class="google-ad-desc">¿Tu pelo no se recupera tras el embarazo? Diagnóstico capilar personalizado gratis. Tratamientos sin cirugía.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #FF69B4, #C2185B);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;margin-bottom:8px;">👶</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Hospital Capilar</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>caída pelo postparto</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>pelo se cae después embarazo</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>alopecia postparto tratamiento</span><span style="color:#E67E22; font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>pelo fino después parto</span><span style="color:#E67E22; font-weight:700;">media</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">caída pelo después embarazo</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Caída Pelo Postparto — Diagnóstico Gratuito</div>
+              <div class="google-ad-desc">¿Tu pelo no se recupera tras el embarazo? Diagnóstico capilar personalizado gratis. Tratamientos sin cirugía.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>caída pelo postparto</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>pelo se cae después embarazo</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>alopecia postparto tratamiento</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>pelo fino después parto</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1098,7 +1123,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:var(--purple-light);">🧬</div>
       <h2 class="niche-name animate-in delay-1">🪞 El Espejo</h2>
       <p class="niche-desc animate-in delay-2">
         Tiene 23-24 años y cada mañana se mira al espejo y ve las entradas avanzar. Lleva meses buscando en Google <em>"se me cae el pelo"</em>, probando productos de Amazon y viendo TikToks. <strong>Su madre es quien le empuja a buscar solución.</strong> Usa dating apps y cada foto le recuerda el problema. No quiere cirugía — quiere frenar ahora. <strong>~80% de los pacientes HC son hombres</strong>, perfil creciente 23-24 años. LTV muy alto: tratamiento crónico + cirugía futura.
@@ -1128,7 +1152,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -1147,26 +1174,37 @@
         </div>
         <a class="meta-ad-cta" href="#" style="background:var(--navy);">Haz tu test gratis →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">se me cae el pelo 25 años</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Prevención Caída Capilar — Plan desde €49/mes</div>
-          <div class="google-ad-desc">Empieza hoy tu tratamiento preventivo. Test de riesgo capilar en 3 minutos. Seguimiento médico mensual.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #2C3E50, #1a252f);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;">⏳</div>
+            <div style="font-size:20px;font-weight:900;margin-top:4px;">€49<span style="font-size:11px;font-weight:400;"> vs </span>€5.000</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>se me cae el pelo joven</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>caída pelo hombre joven</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>entradas pelo 25 años</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>prevención alopecia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">se me cae el pelo 25 años</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Prevención Caída Capilar — Plan desde €49/mes</div>
+              <div class="google-ad-desc">Empieza hoy tu tratamiento preventivo. Test de riesgo capilar en 3 minutos. Seguimiento médico mensual.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>se me cae el pelo joven</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>caída pelo hombre joven</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>entradas pelo 25 años</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>prevención alopecia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1183,7 +1221,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:#FFF3E0;">💉</div>
       <h2 class="niche-name animate-in delay-1">🏪 Ya Me Engañaron</h2>
       <p class="niche-desc animate-in delay-2">
         Fue a Insparya, Svenson, IMD o una clínica local. Le vendieron un tratamiento caro con promesas, y <strong>no funcionó</strong>. O peor: le vendieron cirugía cuando solo necesitaba tratamiento. Reviews tipo <em>"pagué €3.500 en Svenson, cero resultados"</em>. Ahora desconfía de TODO el sector. Su principal necesidad: <strong>un médico que le diga la verdad</strong>, sin pitch de venta. Insparya 3.8/5 TP, Svenson 1.5/5 TP = flujo constante de insatisfechos. LTV alto: ya pagó €1.000-5.000 en otro sitio.
@@ -1213,7 +1250,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -1232,26 +1272,37 @@
         </div>
         <a class="meta-ad-cta" href="#" style="background:#E67E22;">Pide tu segunda opinión →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">opiniones insparya alternativa</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Alternativa a Insparya — Hospital Capilar 4.8★</div>
-          <div class="google-ad-desc">¿No quedaste satisfecho? Diagnóstico gratuito + segunda opinión médica honesta. Sin presión. Solo la verdad.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #E67E22, #D35400);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;">🏥</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Hospital vs. Estética</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>opiniones insparya</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>alternativa a insparya</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>svenson opiniones</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>mejor clínica capilar españa</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">opiniones insparya alternativa</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Alternativa a Insparya — Hospital Capilar 4.8★</div>
+              <div class="google-ad-desc">¿No quedaste satisfecho? Diagnóstico gratuito + segunda opinión médica honesta. Sin presión. Solo la verdad.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>opiniones insparya</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>alternativa a insparya</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>svenson opiniones</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>mejor clínica capilar españa</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1268,7 +1319,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:#E8F8F5;">💊</div>
       <h2 class="niche-name animate-in delay-1">💊 La Farmacia Sin Salida</h2>
       <p class="niche-desc animate-in delay-2">
         Lleva 2-4 años comprando Olistic, Iraltone, Pilexil, champús "anticaída" sin receta. Ha gastado <strong>€500-1.500 en productos que prometían pero no frenaron nada</strong>. Está en el punto de inflexión: o busca algo médico de verdad, o se resigna. Pipeline natural de <strong>700K+ clientes de Olistic que fallarán</strong>. HC le dice: "no es que no funcione nada — es que lo que usabas no podía funcionar para tu tipo de alopecia." Protocolo <strong>HRT</strong> — pauta anual personalizada.
@@ -1298,7 +1348,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -1317,26 +1370,37 @@
         </div>
         <a class="meta-ad-cta" href="#" style="background:#2ECC71;">Empieza tu plan →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">alternativa olistic no funciona</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">HRT — Tratamiento Capilar Personalizado | HC</div>
-          <div class="google-ad-desc">HRT — Pauta anual con seguimiento médico especializado. Analítica incluida. No más automedicación.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #2ECC71, #1a8c4e);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;">💊</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Plan médico</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>olistic no funciona</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>alternativa pilexil iraltone</span><span style="color:#E67E22; font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>tratamiento alopecia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>tratamiento oral capilar</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">alternativa olistic no funciona</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">HRT — Tratamiento Capilar Personalizado | HC</div>
+              <div class="google-ad-desc">HRT — Pauta anual con seguimiento médico especializado. Analítica incluida. No más automedicación.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>olistic no funciona</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>alternativa pilexil iraltone</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>tratamiento alopecia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>tratamiento oral capilar</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1353,7 +1417,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:#EBF5FB;">🔬</div>
       <h2 class="niche-name animate-in delay-1">❓ ¿Qué Me Pasa?</h2>
       <p class="niche-desc animate-in delay-2">
         Nota que se le cae el pelo — en la ducha, en la almohada, al peinarse — pero no sabe por qué. ¿Es estrés? ¿Es genético? ¿Es la tiroides? ¿Es el ovario poliquístico? Dato brutal: <strong>el 70% de españoles con caída capilar nunca han sido diagnosticados</strong> (Pfizer España 2024). Le han dicho "es estrés, ya pasará". No sabe que existe algo tan simple como una tricoscopía + analítica hormonal. Aquí entran también las mujeres con <strong>SOP, cambios de anticonceptivos o estrés crónico</strong> que no encajan en los nichos femeninos específicos. Es el nicho más grande en volumen bruto (<strong>~14M sin diagnóstico</strong>), pero necesita educación antes de venta. La puerta de entrada al ecosistema HC.
@@ -1383,7 +1446,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -1402,26 +1468,37 @@
         </div>
         <a class="meta-ad-cta" href="#" style="background:#3498DB;">Descubre tu diagnóstico →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">por qué se me cae el pelo</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">¿Se Te Cae el Pelo? — Diagnóstico Online Gratis</div>
-          <div class="google-ad-desc">Descubre la causa de tu caída capilar en 3 minutos. Quiz diagnóstico + valoración médica gratuita.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #3498DB, #2471A3);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;">🔬</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Quiz diagnóstico</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>por qué se me cae el pelo</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>caída pelo causas</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>se me cae el pelo</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>diagnóstico capilar</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">por qué se me cae el pelo</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">¿Se Te Cae el Pelo? — Diagnóstico Online Gratis</div>
+              <div class="google-ad-desc">Descubre la causa de tu caída capilar en 3 minutos. Quiz diagnóstico + valoración médica gratuita.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>por qué se me cae el pelo</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>caída pelo causas</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>se me cae el pelo</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>diagnóstico capilar</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          </div>
         </div>
       </div>
     </div>
@@ -1438,7 +1515,6 @@
 
   <div class="niche-hero">
     <div class="niche-left">
-      <div class="niche-icon animate-in" style="background:#FCE4EC;">🔄</div>
       <h2 class="niche-name animate-in delay-1">💸 La Inversión</h2>
       <p class="niche-desc animate-in delay-2">
         El paciente que se operó — en Turquía, en España, en HC o fuera — y <strong>no tiene plan de mantenimiento</strong>. Su pelo nativo sigue cayendo mientras el trasplantado crece. Dato real HC: ~10% del total de tratamientos son post-cirugía. Con 20.000 españoles/año operándose en Turquía y 15.000 en España, la mayoría sin seguimiento. Ingreso recurrente con coste de captación cero para pacientes propios.
@@ -1468,7 +1544,10 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad" style="transform:scale(0.78);transform-origin:top center;margin-bottom:-24px;">
+      <div style="display:grid; grid-template-columns:1fr auto; grid-template-rows:auto auto; gap:10px;">
+        <!-- Meta Ad compact -->
+        <div style="transform:scale(0.68);transform-origin:top left;height:260px;overflow:hidden;">
+          <div class="meta-ad">
         <div class="meta-ad-header">
           <div class="meta-ad-avatar">HC</div>
           <div>
@@ -1487,26 +1566,37 @@
         </div>
         <a class="meta-ad-cta" href="#" style="background:#E91E63;">Pide tu revisión gratis →</a>
       </div>
-      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
-      <div class="google-serp" style="font-size:0.9em;">
-        <div class="google-serp-bar">
-          <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">pelo sigue cayendo después injerto</div>
         </div>
-        <div class="google-serp-content">
-          <div class="google-ad-sponsored"></div>
-          <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Post-Trasplante — Revisión Gratuita | HC</div>
-          <div class="google-ad-desc">¿Te operaste y el pelo sigue cayendo? Revisión post-trasplante gratuita. Tratamiento correctivo por especialistas.</div>
+        <!-- IG Story -->
+        <div style="transform:scale(0.55);transform-origin:top right;width:140px;height:260px;overflow:hidden;">
+          <div class="story-mock" style="background: linear-gradient(135deg, #E91E63, #880E4F);">
+          <div class="story-progress"></div>
+          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
+            <div style="font-size:48px;">✈️</div>
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Turquía / Low-cost</div>
+          </div>
         </div>
-      </div>
-      <div style="margin-top:12px;">
-        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
-        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
-          <div style="display:flex; justify-content:space-between;"><span>mantenimiento post trasplante</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>pelo cae después injerto</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>resultado trasplante capilar</span><span style="color:#E67E22; font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>tratamiento post trasplante</span><span style="color:#E67E22; font-weight:700;">media</span></div>
+        <!-- Google SERP -->
+        <div style="grid-column:1/3;">
+          <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Google Search</div>
+          <div class="google-serp" style="font-size:0.75em;">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">pelo sigue cayendo después injerto</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Post-Trasplante — Revisión Gratuita | HC</div>
+              <div class="google-ad-desc">¿Te operaste y el pelo sigue cayendo? Revisión post-trasplante gratuita. Tratamiento correctivo por especialistas.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:3px;margin-top:6px;">
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>mantenimiento post trasplante</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>pelo cae después injerto</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>resultado trasplante capilar</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:0.72rem;"><span>tratamiento post trasplante</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          </div>
         </div>
       </div>
     </div>
