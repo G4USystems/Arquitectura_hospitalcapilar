@@ -96,6 +96,14 @@
     background: var(--purple-light);
   }
 
+
+  /* Compact right column for campaign elements */
+  .niche-right .google-serp { font-size: 0.72em; }
+  .niche-right .meta-ad { max-width: 100%; }
+  .niche-right .meta-ad-img { padding: 14px; min-height: auto; }
+  .niche-right .meta-ad-img div { font-size: 12px !important; margin-bottom: 4px !important; }
+  .niche-right .meta-ad-cta { padding: 6px; font-size: 10px; }
+
   /* Cards */
   .card {
     background: var(--white);
@@ -499,8 +507,9 @@
   .niche-hero {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 20px;
     flex: 1;
+    align-items: start;
   }
   .niche-left {
     display: flex;
@@ -525,16 +534,16 @@
   }
 
   .niche-name {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 800;
     color: var(--navy);
     margin-bottom: 6px;
   }
   .niche-desc {
-    font-size: 0.9rem;
+    font-size: 0.78rem;
     color: var(--text-light);
-    line-height: 1.5;
-    margin-bottom: 16px;
+    line-height: 1.35;
+    margin-bottom: 8px;
   }
 
   .kpi-row {
@@ -955,14 +964,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #6BA89E 0%, #4CA994 50%, #a886cd 100%);">
@@ -970,20 +981,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Pelo más fino desde la menopausia?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">9.6M mujeres afectadas en España.<br>Tu ginecóloga no es especialista capilar.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Diagnóstico capilar femenino gratuito. Descubre qué tratamiento es el ideal para ti.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#">Pide tu diagnóstico gratis →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">caída pelo menopausia tratamiento</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Caída Pelo Menopausia — Diagnóstico Gratuito</div>
+              <div class="google-ad-desc">Diagnóstico capilar personalizado. Clínicas en Madrid, Pontevedra y Murcia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>caída pelo menopausia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>pelo fino menopausia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>alopecia femenina menopausia</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>caída pelo mujer 50 años</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"caída pelo menopausia tratamiento"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
@@ -1024,14 +1052,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #FF69B4 0%, #a886cd 100%);">
@@ -1039,20 +1069,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Se te cae el pelo desde el parto?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">No es "normal" si lleva meses.<br>Descubre la solución real.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Diagnóstico capilar postparto gratuito. Tratamiento personalizado para recuperar tu pelo.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#" style="background:#FF69B4;">Pide tu diagnóstico gratis →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">caída pelo después embarazo</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Caída Pelo Postparto — Diagnóstico Gratuito</div>
+              <div class="google-ad-desc">¿Tu pelo no se recupera tras el embarazo? Tratamientos sin cirugía.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>caída pelo postparto</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>pelo cae después embarazo</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>alopecia postparto</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>pelo fino después parto</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"caída pelo después embarazo"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
@@ -1093,14 +1140,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #2C3E50, #34495E);">
@@ -1108,20 +1157,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Entradas a los 25?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">Actúa ahora o paga después.<br>Plan de prevención desde €49/mes.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Test de riesgo capilar online. Descubre si tu caída tiene solución antes de que avance.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#" style="background:var(--navy);">Haz tu test gratis →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">se me cae el pelo 25 años</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Prevención Caída Capilar — Plan desde €49/mes</div>
+              <div class="google-ad-desc">Test de riesgo capilar en 3 min. Seguimiento médico. Hospital Capilar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>se me cae el pelo joven</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>caída pelo hombre joven</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>entradas pelo 25 años</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>prevención alopecia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"se me cae el pelo 25 años"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
@@ -1162,14 +1228,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #E67E22, #D35400);">
@@ -1177,20 +1245,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Te vendieron humo en otra clínica?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">Segunda opinión médica gratuita.<br>Sin presión. Sin venta. Solo la verdad.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Segunda opinión capilar gratuita. Diagnóstico honesto por especialistas. 4.8★ en Trustpilot — más de 5.000 opiniones.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#" style="background:#E67E22;">Pide tu segunda opinión →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">opiniones insparya alternativa</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Alternativa a Insparya — HC 4.8★ Trustpilot</div>
+              <div class="google-ad-desc">Segunda opinión médica honesta. Sin presión. Solo la verdad.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>opiniones insparya</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>alternativa a insparya</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>svenson opiniones</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>mejor clínica capilar</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"opiniones insparya alternativa"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
@@ -1231,14 +1316,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #2ECC71, #27AE60);">
@@ -1246,20 +1333,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Tratándote sin supervisión?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">HRT: tratamiento personalizado<br>con seguimiento médico continuo.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — HRT — Pauta anual personalizada con seguimiento médico. Protocolo exclusivo Hospital Capilar.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#" style="background:#2ECC71;">Empieza tu plan →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">alternativa olistic no funciona</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">HRT — Tratamiento Personalizado | HC</div>
+              <div class="google-ad-desc">Pauta anual con seguimiento médico. No más automedicación.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>olistic no funciona</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>alternativa pilexil</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>tratamiento alopecia</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>tratamiento oral capilar</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"alternativa olistic no funciona"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
@@ -1300,14 +1404,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #3498DB, #2980B9);">
@@ -1315,20 +1421,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Por qué se te cae el pelo?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">Descúbrelo en 3 minutos con nuestro<br>diagnóstico capilar inteligente.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Quiz diagnóstico online + consulta presencial gratuita. Descubre la causa y la solución.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#" style="background:#3498DB;">Descubre tu diagnóstico →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">por qué se me cae el pelo</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">¿Se Te Cae el Pelo? — Diagnóstico Gratis</div>
+              <div class="google-ad-desc">Descubre la causa en 3 min. Quiz diagnóstico + valoración gratuita.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>por qué se cae el pelo</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>caída pelo causas</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>se me cae el pelo</span><span style="color:var(--teal);font-weight:700;">muy alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>diagnóstico capilar</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"por qué se me cae el pelo"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
@@ -1369,14 +1492,16 @@
       </div>
     </div>
 
-    <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
+    <div class="niche-right animate-in delay-3">
+      <div style="display:flex; gap:10px; margin-bottom:10px;">
+        <!-- Meta Ad compact -->
+        <div style="flex:1; min-width:0;">
+          <div class="meta-ad" style="max-width:100%;">
+        <div class="meta-ad-header" style="padding:6px 10px;">
+          <div class="meta-ad-avatar" style="width:20px;height:20px;font-size:8px;">HC</div>
           <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
+            <div class="meta-ad-name" style="font-size:10px;">Hospital Capilar</div>
+            <div class="meta-ad-sponsor" style="font-size:8px;">Publicidad</div>
           </div>
         </div>
         <div class="meta-ad-img" style="background: linear-gradient(135deg, #E91E63, #C2185B);">
@@ -1384,20 +1509,37 @@
           <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Te operaste y no estás contento?</div>
           <div style="font-size:12px; opacity:0.9; line-height:1.4;">Tratamientos post-trasplante<br>para mejorar tu resultado.</div>
         </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Revisión post-trasplante gratuita. CRT + tratamiento correctivo por especialistas capilares.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
         <a class="meta-ad-cta" href="#" style="background:#E91E63;">Pide tu revisión gratis →</a>
+      </div>
+        </div>
+        <!-- Google SERP -->
+        <div style="flex:1.2; min-width:0;">
+          <div class="google-serp">
+            <div class="google-serp-bar">
+              <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
+              <div class="google-serp-searchbox">pelo sigue cayendo después injerto</div>
+            </div>
+            <div class="google-serp-content">
+              <div class="google-ad-sponsored"></div>
+              <div class="google-ad-url">diagnostico.hospitalcapilar.com</div>
+              <div class="google-ad-title">Post-Trasplante — Revisión Gratuita | HC</div>
+              <div class="google-ad-desc">Tratamiento correctivo por especialistas capilares.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Keywords -->
+      <div>
+        <div style="font-size:0.6rem;font-weight:700;color:var(--text-lighter);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:4px;">Keywords Target</div>
+        <div style="display:flex;flex-direction:column;gap:3px;font-size:0.72rem;">
+          <div style="display:flex;justify-content:space-between;"><span>mantenimiento post trasplante</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>pelo cae después injerto</span><span style="color:var(--teal);font-weight:700;">alta</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>resultado trasplante</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+          <div style="display:flex;justify-content:space-between;"><span>tratamiento post trasplante</span><span style="color:#E67E22;font-weight:700;">media</span></div>
+        </div>
       </div>
     </div>
 </div>
-  <div class="animate-in delay-5" style="display:flex; align-items:flex-start; gap:16px; margin-top:12px; padding:12px 16px; background:var(--bg-warm); border-radius:12px; border:1px solid var(--border);">
-    <div style="flex:1;">
-      <div style="font-size:0.6rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:4px;">Google Search Target</div>
-      <div style="font-size:0.78rem; color:var(--navy); font-weight:600; margin-bottom:6px;">"pelo sigue cayendo después injerto"</div>
-      <div style="display:flex; flex-wrap:wrap; gap:2px;"></div>
-    </div>
   </div>
 </div>
 
