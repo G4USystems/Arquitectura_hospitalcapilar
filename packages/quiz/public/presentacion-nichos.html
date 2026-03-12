@@ -498,8 +498,8 @@
   /* Niche slide layout */
   .niche-hero {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 24px;
     flex: 1;
   }
   .niche-left {
@@ -515,8 +515,8 @@
   }
 
   .niche-icon {
-    width: 56px; height: 56px;
-    border-radius: 16px;
+    width: 40px; height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -525,16 +525,16 @@
   }
 
   .niche-name {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 800;
     color: var(--navy);
     margin-bottom: 6px;
   }
   .niche-desc {
-    font-size: 1rem;
+    font-size: 0.82rem;
     color: var(--text-light);
-    line-height: 1.6;
-    margin-bottom: 20px;
+    line-height: 1.4;
+    margin-bottom: 10px;
   }
 
   .kpi-row {
@@ -957,44 +957,8 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #6BA89E 0%, #4CA994 50%, #a886cd 100%);">
-          <div style="font-size:28px; margin-bottom:8px;">👩‍⚕️</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Pelo más fino desde la menopausia?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">9.6M mujeres afectadas en España.<br>Tu ginecóloga no es especialista capilar.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Diagnóstico capilar femenino gratuito. Descubre qué tratamiento es el ideal para ti.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#">Pide tu diagnóstico gratis →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 7: NICHO 1 — ADS DETALLE ==================== -->
-<div class="slide" data-slide="7">
-  <div class="slide-header">
-    <span class="section-label purple-label">"Es Normal" — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">"Es Normal": Así lo verán</h2>
-  <p class="slide-subtitle animate-in delay-1">Campaña multicanal: Meta Ads + Google Search + Instagram Stories</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <!-- Google Ad -->
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
           <div class="google-serp-searchbox">caída pelo menopausia tratamiento</div>
@@ -1003,55 +967,25 @@
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
           <div class="google-ad-title">Caída Pelo Menopausia — Diagnóstico Gratuito</div>
-          <div class="google-ad-desc">¿Tu pelo se cae más de lo normal? Descubre la causa con un diagnóstico capilar personalizado. Clínicas en Madrid, Pontevedra y Murcia.</div>
+          <div class="google-ad-desc">¿Tu pelo se cae más de lo normal? Diagnóstico capilar personalizado. Clínicas en Madrid, Pontevedra y Murcia.</div>
         </div>
       </div>
-    </div>
-
-    <!-- Instagram Stories -->
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #6BA89E, #3D9B8F);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;margin-bottom:8px;">👩‍⚕️</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Hospital Capilar</div>
-          </div>
-          <div class="story-title">¿Tu pelo cada vez más fino?</div>
-          <div class="story-cta">Desliza para saber más</div>
-        </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #a886cd, #8B6FB0);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:36px;font-weight:900;">4/10</div>
-            <div style="font-size:9px;opacity:0.8;">mujeres</div>
-          </div>
-          <div class="story-title">4 de cada 10 mujeres lo sufren</div>
-          <div class="story-cta">Diagnóstico gratis →</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Keywords -->
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Keywords Target</div>
-      <div class="card" style="padding:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
           <div style="display:flex; justify-content:space-between;"><span>caída pelo menopausia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>pelo fino menopausia tratamiento</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>alopecia femenina menopausia</span><span style="color:var(--teal); font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>pérdida cabello perimenopausia</span><span style="color:var(--teal); font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>caída pelo mujer 50 años</span><span style="color:var(--teal); font-weight:700;">media</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>pelo fino menopausia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>alopecia femenina menopausia</span><span style="color:#E67E22; font-weight:700;">media</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>caída pelo mujer 50 años</span><span style="color:#E67E22; font-weight:700;">media</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
-
+</div>
 
 <!-- ==================== SLIDE 8: NICHO 2 — TAMBIÉN ES NORMAL ==================== -->
-<div class="slide" data-slide="8">
+<div class="slide" data-slide="7">
   <div class="slide-header">
     <span class="section-label">Nicho 2 de 7</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1089,44 +1023,8 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <!-- Meta Ad Mockup -->
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #FF69B4 0%, #a886cd 100%);">
-          <div style="font-size:28px; margin-bottom:8px;">👶</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Se te cae el pelo desde el parto?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">No es "normal" si lleva meses.<br>Descubre la solución real.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Diagnóstico capilar postparto gratuito. Tratamiento personalizado para recuperar tu pelo.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#" style="background:#FF69B4;">Pide tu diagnóstico gratis →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 25: NICHO 7 — ADS DETALLE ==================== -->
-<div class="slide" data-slide="9">
-  <div class="slide-header">
-    <span class="section-label purple-label">"Lo Que Vino Con el Bebé" — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">"Lo Que Vino Con el Bebé": Así lo verán</h2>
-  <p class="slide-subtitle animate-in delay-1">Campaña multicanal: Meta Ads + Google Search + Instagram Stories</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <!-- Google Ad -->
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
           <div class="google-serp-searchbox">caída pelo después embarazo</div>
@@ -1134,66 +1032,26 @@
         <div class="google-serp-content">
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Caída Pelo Postparto — Diagnóstico Capilar Gratuito</div>
-          <div class="google-ad-desc">¿Tu pelo no se recupera tras el embarazo? Diagnóstico capilar personalizado gratis. Tratamientos sin cirugía. Clínicas en Madrid, Pontevedra y Murcia.</div>
+          <div class="google-ad-title">Caída Pelo Postparto — Diagnóstico Gratuito</div>
+          <div class="google-ad-desc">¿Tu pelo no se recupera tras el embarazo? Diagnóstico capilar personalizado gratis. Tratamientos sin cirugía.</div>
         </div>
       </div>
-    </div>
-
-    <!-- Instagram Stories -->
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #FF69B4, #C2185B);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;margin-bottom:8px;">👶</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Hospital Capilar</div>
-          </div>
-          <div class="story-title">¿Se te cae desde el parto?</div>
-          <div class="story-cta">Desliza para saber más</div>
-        </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #a886cd, #8B6FB0);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:36px;font-weight:900;">8m</div>
-            <div style="font-size:9px;opacity:0.8;">sin recuperar</div>
-          </div>
-          <div class="story-title">Si llevas +6 meses, no es normal</div>
-          <div class="story-cta">Diagnóstico gratis →</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Keywords -->
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Keywords Target</div>
-      <div class="card" style="padding:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
           <div style="display:flex; justify-content:space-between;"><span>caída pelo postparto</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>pelo se cae después embarazo</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>alopecia postparto tratamiento</span><span style="color:#E67E22; font-weight:700;">media</span></div>
           <div style="display:flex; justify-content:space-between;"><span>pelo fino después parto</span><span style="color:#E67E22; font-weight:700;">media</span></div>
         </div>
       </div>
-
-      <div style="margin-top:12px;">
-        <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Feed Instagram</div>
-        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:3px; border-radius:8px; overflow:hidden;">
-          <div style="aspect-ratio:1; background:#E0E7EC; display:flex; align-items:center; justify-content:center; font-size:18px;">👶</div>
-          <div style="aspect-ratio:1; background:#D0D9E0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--navy); text-align:center; padding:4px;">Recupera tu pelo</div>
-          <div style="aspect-ratio:1; background:#E0E7EC; display:flex; align-items:center; justify-content:center; font-size:18px;">🤱</div>
-          <div style="aspect-ratio:1; background:#D0D9E0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--navy); text-align:center; padding:4px;">No es estrés</div>
-          <div style="aspect-ratio:1; background:#E0E7EC; display:flex; align-items:center; justify-content:center; font-size:18px;">💪</div>
-          <div style="aspect-ratio:1; background:#D0D9E0; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:var(--navy); text-align:center; padding:4px;">Resultados</div>
-        </div>
-      </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- ==================== SLIDE 26: NICHO 7 — PREVENCIÓN ==================== -->
-<div class="slide" data-slide="10">
+<div class="slide" data-slide="8">
   <div class="slide-header">
     <span class="section-label">Nicho 3 de 7</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1231,42 +1089,8 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #2C3E50, #34495E);">
-          <div style="font-size:28px; margin-bottom:8px;">🧬</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Entradas a los 25?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">Actúa ahora o paga después.<br>Plan de prevención desde €49/mes.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Test de riesgo capilar online. Descubre si tu caída tiene solución antes de que avance.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#" style="background:var(--navy);">Haz tu test gratis →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 25: NICHO 7 — ADS DETALLE ==================== -->
-<div class="slide" data-slide="11">
-  <div class="slide-header">
-    <span class="section-label purple-label">El Espejo — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">El Espejo: El paciente joven</h2>
-  <p class="slide-subtitle animate-in delay-1">Captar a los 25 para fidelizar hasta los 50. Suscripción + tratamientos presenciales.</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
           <div class="google-serp-searchbox">se me cae el pelo 25 años</div>
@@ -1275,52 +1099,25 @@
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
           <div class="google-ad-title">Prevención Caída Capilar — Plan desde €49/mes</div>
-          <div class="google-ad-desc">Empieza hoy tu tratamiento preventivo. Test de riesgo capilar en 3 minutos. Seguimiento médico mensual. Hospital Capilar.</div>
+          <div class="google-ad-desc">Empieza hoy tu tratamiento preventivo. Test de riesgo capilar en 3 minutos. Seguimiento médico mensual.</div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #2C3E50, #1a252f);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">⏳</div>
-            <div style="font-size:20px;font-weight:900;margin-top:4px;">€49<span style="font-size:11px;font-weight:400;"> vs </span>€5.000</div>
-          </div>
-          <div class="story-title">Prevención a los 25 o cirugía a los 35</div>
-          <div class="story-cta">¿Cuánto quieres esperar?</div>
-        </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #6BA89E, #2C3E50);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">🧬</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">3 minutos</div>
-          </div>
-          <div class="story-title">Test de riesgo capilar online</div>
-          <div class="story-cta">Hacer test gratis →</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Keywords Target</div>
-      <div class="card" style="padding:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
           <div style="display:flex; justify-content:space-between;"><span>se me cae el pelo joven</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>caída pelo hombre joven</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>entradas pelo 25 años</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>evitar calvicie tratamiento</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>prevención alopecia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- ==================== SLIDE 26: NICHO 7 — REGENERACIÓN CAPILAR ==================== -->
-<div class="slide" data-slide="12">
+<div class="slide" data-slide="9">
   <div class="slide-header">
     <span class="section-label">Nicho 4 de 7</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1358,42 +1155,8 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #E67E22, #D35400);">
-          <div style="font-size:28px; margin-bottom:8px;">💉</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Te vendieron humo en otra clínica?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">Segunda opinión médica gratuita.<br>Sin presión. Sin venta. Solo la verdad.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Segunda opinión capilar gratuita. Diagnóstico honesto por especialistas. 4.8★ en Trustpilot — más de 5.000 opiniones.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#" style="background:#E67E22;">Pide tu segunda opinión →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 25: NICHO 7 — ADS ==================== -->
-<div class="slide" data-slide="13">
-  <div class="slide-header">
-    <span class="section-label purple-label">Ya Me Engañaron — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">Ya Me Engañaron: La verdad como arma</h2>
-  <p class="slide-subtitle animate-in delay-1">Le vendieron humo en otra clínica. Necesita transparencia. HC = 4.8 Trustpilot vs Insparya 3.8 vs Svenson 1.5.</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
           <div class="google-serp-searchbox">opiniones insparya alternativa</div>
@@ -1401,40 +1164,13 @@
         <div class="google-serp-content">
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Alternativa a Insparya — Hospital Capilar 4.8★ Trustpilot</div>
-          <div class="google-ad-desc">¿No quedaste satisfecho con tu clínica? Diagnóstico gratuito + segunda opinión médica honesta. Sin presión. Sin venta. Solo la verdad sobre tu pelo.</div>
+          <div class="google-ad-title">Alternativa a Insparya — Hospital Capilar 4.8★</div>
+          <div class="google-ad-desc">¿No quedaste satisfecho? Diagnóstico gratuito + segunda opinión médica honesta. Sin presión. Solo la verdad.</div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #E67E22, #D35400);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">🏥</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Hospital vs. Estética</div>
-          </div>
-          <div class="story-title">CRT: regeneración por especialistas</div>
-          <div class="story-cta">Conoce la diferencia</div>
-        </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #6BA89E, #E67E22);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:36px;font-weight:900;">×3</div>
-            <div style="font-size:9px;opacity:0.8;">sesiones</div>
-          </div>
-          <div class="story-title">3 sesiones. Resultados visibles.</div>
-          <div class="story-cta">Ver resultados →</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Keywords Target</div>
-      <div class="card" style="padding:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
           <div style="display:flex; justify-content:space-between;"><span>opiniones insparya</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>alternativa a insparya</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>svenson opiniones</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
@@ -1444,9 +1180,10 @@
     </div>
   </div>
 </div>
+</div>
 
 <!-- ==================== SLIDE 26: NICHO 7 — FARMACOLÓGICO ==================== -->
-<div class="slide" data-slide="14">
+<div class="slide" data-slide="10">
   <div class="slide-header">
     <span class="section-label">Nicho 5 de 7</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1484,42 +1221,8 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #2ECC71, #27AE60);">
-          <div style="font-size:28px; margin-bottom:8px;">💊</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Tratándote sin supervisión?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">HRT: tratamiento personalizado<br>con seguimiento médico continuo.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — HRT — Pauta anual personalizada con seguimiento médico. Protocolo exclusivo Hospital Capilar.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#" style="background:#2ECC71;">Empieza tu plan →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 25: NICHO 7 — ADS ==================== -->
-<div class="slide" data-slide="15">
-  <div class="slide-header">
-    <span class="section-label purple-label">La Farmacia — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">La Farmacia Sin Salida: Al hospital</h2>
-  <p class="slide-subtitle animate-in delay-1">De 3 años gastando en la farmacia a una pauta anual con seguimiento médico real.</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
           <div class="google-serp-searchbox">alternativa olistic no funciona</div>
@@ -1527,53 +1230,26 @@
         <div class="google-serp-content">
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">HRT — Tratamiento Capilar Personalizado | Hospital Capilar</div>
-          <div class="google-ad-desc">HRT (Hair Redensification Treatment) — Pauta anual con seguimiento médico especializado. Analítica incluida. No más automedicación.</div>
+          <div class="google-ad-title">HRT — Tratamiento Capilar Personalizado | HC</div>
+          <div class="google-ad-desc">HRT — Pauta anual con seguimiento médico especializado. Analítica incluida. No más automedicación.</div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #2ECC71, #1a8c4e);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">💊</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Plan médico</div>
-          </div>
-          <div class="story-title">HRT: tu pauta anual personalizada.</div>
-          <div class="story-cta">Plan médico desde €49</div>
-        </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #2C3E50, #2ECC71);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">📋</div>
-            <div style="font-size:11px;font-weight:700;">Todo incluido</div>
-          </div>
-          <div class="story-title">Tratamiento + seguimiento + analíticas</div>
-          <div class="story-cta">Todo incluido →</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Keywords Target</div>
-      <div class="card" style="padding:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
           <div style="display:flex; justify-content:space-between;"><span>olistic no funciona</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>alternativa pilexil iraltone</span><span style="color:var(--teal); font-weight:700;">media</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>alternativa pilexil iraltone</span><span style="color:#E67E22; font-weight:700;">media</span></div>
           <div style="display:flex; justify-content:space-between;"><span>tratamiento alopecia</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
           <div style="display:flex; justify-content:space-between;"><span>tratamiento oral capilar</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>medicamento caída pelo</span><span style="color:var(--teal); font-weight:700;">media</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- ==================== SLIDE 26: NICHO 7 — DIAGNÓSTICO ==================== -->
-<div class="slide" data-slide="16">
+<div class="slide" data-slide="11">
   <div class="slide-header">
     <span class="section-label">Nicho 6 de 7</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1611,42 +1287,8 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #3498DB, #2980B9);">
-          <div style="font-size:28px; margin-bottom:8px;">🔬</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Por qué se te cae el pelo?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">Descúbrelo en 3 minutos con nuestro<br>diagnóstico capilar inteligente.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Quiz diagnóstico online + consulta presencial gratuita. Descubre la causa y la solución.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#" style="background:#3498DB;">Descubre tu diagnóstico →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 25: NICHO 7 — ADS ==================== -->
-<div class="slide" data-slide="17">
-  <div class="slide-header">
-    <span class="section-label purple-label">¿Qué Me Pasa? — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">¿Qué Me Pasa?: La puerta de entrada</h2>
-  <p class="slide-subtitle animate-in delay-1">El quiz online como herramienta de captación masiva. Ya lo tenemos construido.</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
           <div class="google-serp-searchbox">por qué se me cae el pelo</div>
@@ -1655,54 +1297,25 @@
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
           <div class="google-ad-title">¿Se Te Cae el Pelo? — Diagnóstico Online Gratis</div>
-          <div class="google-ad-desc">Descubre la causa de tu caída capilar en 3 minutos. Quiz diagnóstico + valoración médica gratuita. Hospital Capilar.</div>
+          <div class="google-ad-desc">Descubre la causa de tu caída capilar en 3 minutos. Quiz diagnóstico + valoración médica gratuita.</div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #3498DB, #2471A3);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">🔬</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Quiz diagnóstico</div>
-          </div>
-          <div class="story-title">¿Por qué se te cae el pelo? Descúbrelo en 3 min</div>
-          <div class="story-cta">Quiz diagnóstico gratis</div>
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
+          <div style="display:flex; justify-content:space-between;"><span>por qué se me cae el pelo</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>caída pelo causas</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>se me cae el pelo</span><span style="color:var(--teal); font-weight:700;">muy alta</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>diagnóstico capilar</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
         </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #6BA89E, #3498DB);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">✅</div>
-            <div style="font-size:9px;opacity:0.8;">Plan personalizado</div>
-          </div>
-          <div class="story-title">Tu diagnóstico + plan de acción</div>
-          <div class="story-cta">Empezar quiz →</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Lo que ya tenemos</div>
-      <div class="card card-accent" style="padding:16px;">
-        <p style="font-size:0.85rem; color:var(--text); line-height:1.5; margin-bottom:8px;">
-          <strong>diagnostico.hospitalcapilar.com</strong> ya tiene un quiz diagnóstico funcional con:
-        </p>
-        <ul class="bullet-list" style="font-size:0.82rem;">
-          <li>Preguntas adaptativas según respuestas</li>
-          <li>Integración con GHL (CRM)</li>
-          <li>Lead scoring automático</li>
-          <li>Redirección a booking de cita</li>
-        </ul>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- ==================== SLIDE 26: NICHO 7 — POST-TRASPLANTE ==================== -->
-<div class="slide" data-slide="18">
+<div class="slide" data-slide="12">
   <div class="slide-header">
     <span class="section-label">Nicho 7 de 7</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1740,95 +1353,35 @@
     </div>
 
     <div class="niche-right animate-in delay-4">
-      <div class="meta-ad">
-        <div class="meta-ad-header">
-          <div class="meta-ad-avatar">HC</div>
-          <div>
-            <div class="meta-ad-name">Hospital Capilar</div>
-            <div class="meta-ad-sponsor">Publicidad · 🌍</div>
-          </div>
-        </div>
-        <div class="meta-ad-img" style="background: linear-gradient(135deg, #E91E63, #C2185B);">
-          <div style="font-size:28px; margin-bottom:8px;">🔄</div>
-          <div style="font-size:16px; font-weight:800; margin-bottom:6px;">¿Te operaste y no estás contento?</div>
-          <div style="font-size:12px; opacity:0.9; line-height:1.4;">Tratamientos post-trasplante<br>para mejorar tu resultado.</div>
-        </div>
-        <div class="meta-ad-body">
-          <p style="font-size:12px; color:#1c1e21; margin-bottom:4px;"><strong>Hospital Capilar</strong> — Revisión post-trasplante gratuita. CRT + tratamiento correctivo por especialistas capilares.</p>
-          <p style="font-size:11px; color:#65676B;">diagnostico.hospitalcapilar.com</p>
-        </div>
-        <a class="meta-ad-cta" href="#" style="background:#E91E63;">Pide tu revisión gratis →</a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ==================== SLIDE 25: NICHO 7 — ADS ==================== -->
-<div class="slide" data-slide="19">
-  <div class="slide-header">
-    <span class="section-label purple-label">La Inversión — Campañas</span>
-    <img src="logo-hc.svg" class="hc-logo" alt="HC">
-  </div>
-  <h2 class="slide-title animate-in">La Inversión: Fidelizar y recuperar</h2>
-  <p class="slide-subtitle animate-in delay-1">Dos segmentos: pacientes propios (fidelización) y pacientes de Turquía/low-cost (captación)</p>
-
-  <div class="campaign-grid animate-in delay-2">
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Google Search</div>
-      <div class="google-serp">
+      <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Google Search</div>
+      <div class="google-serp" style="font-size:0.9em;">
         <div class="google-serp-bar">
           <div class="g-logo"><span>G</span><span>o</span><span>o</span><span>g</span><span>l</span><span>e</span></div>
-          <div class="google-serp-searchbox">trasplante capilar turquía problemas</div>
+          <div class="google-serp-searchbox">pelo sigue cayendo después injerto</div>
         </div>
         <div class="google-serp-content">
           <div class="google-ad-sponsored"></div>
           <div class="google-ad-url">https://diagnostico.hospitalcapilar.com</div>
-          <div class="google-ad-title">Post-Trasplante Capilar — Revisión y Tratamiento</div>
-          <div class="google-ad-desc">¿No estás satisfecho con tu trasplante? Revisión gratuita + plan correctivo. Protocolo CRT + seguimiento médico especializado.</div>
+          <div class="google-ad-title">Post-Trasplante — Revisión Gratuita | HC</div>
+          <div class="google-ad-desc">¿Te operaste y el pelo sigue cayendo? Revisión post-trasplante gratuita. Tratamiento correctivo por especialistas.</div>
         </div>
       </div>
-    </div>
-
-    <div>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Instagram Stories</div>
-      <div style="display:flex; gap:8px;">
-        <div class="story-mock" style="background: linear-gradient(135deg, #E91E63, #880E4F);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">✈️</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Turquía / Low-cost</div>
-          </div>
-          <div class="story-title">¿Te operaste y no estás contento?</div>
-          <div class="story-cta">Revisión gratuita</div>
-        </div>
-        <div class="story-mock" style="background: linear-gradient(135deg, #6BA89E, #E91E63);">
-          <div class="story-progress"></div>
-          <div style="position:relative;z-index:2;text-align:center;margin-bottom:auto;padding-top:40px;">
-            <div style="font-size:48px;">🔄</div>
-            <div style="font-size:9px;text-transform:uppercase;letter-spacing:1.5px;opacity:0.8;">Mantenimiento</div>
-          </div>
-          <div class="story-title">Tu trasplante merece el mejor cuidado</div>
-          <div class="story-cta">Plan post-operatorio →</div>
-        </div>
-      </div>
-    </div>
-
-    <div style="flex:1; min-width:220px;">
-      <div style="font-size:0.7rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:8px;">Keywords Target</div>
-      <div class="card" style="padding:16px;">
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:0.82rem;">
-          <div style="display:flex; justify-content:space-between;"><span>cuidados post trasplante</span><span style="color:var(--teal); font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>trasplante pelo turquia problemas</span><span style="color:var(--teal); font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>retoque trasplante capilar</span><span style="color:var(--teal); font-weight:700;">media</span></div>
-          <div style="display:flex; justify-content:space-between;"><span>tratamiento después trasplante</span><span style="color:var(--teal); font-weight:700;">media</span></div>
+      <div style="margin-top:12px;">
+        <div style="font-size:0.65rem; font-weight:700; color:var(--text-lighter); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:6px;">Keywords Target</div>
+        <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
+          <div style="display:flex; justify-content:space-between;"><span>mantenimiento post trasplante</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>pelo cae después injerto</span><span style="color:var(--teal); font-weight:700;">alta</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>resultado trasplante capilar</span><span style="color:#E67E22; font-weight:700;">media</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>tratamiento post trasplante</span><span style="color:#E67E22; font-weight:700;">media</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
+</div>
 
 <!-- ==================== SLIDE 26: VISIÓN COMPLETA ==================== -->
-<div class="slide" data-slide="20">
+<div class="slide" data-slide="13">
   <div class="slide-header">
     <span class="section-label">Visión Completa</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1909,7 +1462,7 @@
 </div>
 
 <!-- ==================== SLIDE 25: EL ECOSISTEMA ==================== -->
-<div class="slide" data-slide="21">
+<div class="slide" data-slide="14">
   <div class="slide-header">
     <span class="section-label">El Ecosistema</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -1980,7 +1533,7 @@
 </div>
 
 <!-- ==================== SLIDE 26: POSICIONAMIENTO ==================== -->
-<div class="slide" data-slide="22">
+<div class="slide" data-slide="15">
   <div class="slide-header">
     <span class="section-label">Posicionamiento</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -2021,7 +1574,7 @@
 </div>
 
 <!-- ==================== SLIDE 25: PROPUESTA TÉCNICA ==================== -->
-<div class="slide" data-slide="23">
+<div class="slide" data-slide="16">
   <div class="slide-header">
     <span class="section-label">Propuesta Técnica</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -2070,7 +1623,7 @@
 </div>
 
 <!-- ==================== SLIDE 26: ROADMAP ==================== -->
-<div class="slide" data-slide="24">
+<div class="slide" data-slide="17">
   <div class="slide-header">
     <span class="section-label">Roadmap</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -2119,7 +1672,7 @@
 </div>
 
 <!-- ==================== SLIDE 25: NEXT STEPS ==================== -->
-<div class="slide" data-slide="25">
+<div class="slide" data-slide="18">
   <div class="slide-header">
     <span class="section-label" style="color:#C0392B; background:#FADBD8;">Próximos Pasos</span>
     <img src="logo-hc.svg" class="hc-logo" alt="HC">
@@ -2170,7 +1723,7 @@
 </div>
 
 <!-- ==================== SLIDE 26: CIERRE ==================== -->
-<div class="slide" data-slide="26">
+<div class="slide" data-slide="19">
   <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center;">
     <div class="animate-in">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 100" fill="none" style="height:60px; margin-bottom:28px;">
@@ -2228,7 +1781,7 @@
 <!-- Footer -->
 <div class="slide-footer">
   <span>Hospital Capilar × Growth4U — Estrategia de Nichos 2026</span>
-  <span class="page-num" id="pageNum">1 / 27</span>
+  <span class="page-num" id="pageNum">1 / 20</span>
 </div>
 
 <!-- Progress bar -->
