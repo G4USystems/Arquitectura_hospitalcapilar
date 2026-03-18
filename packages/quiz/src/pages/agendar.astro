@@ -1,51 +1,8 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import BookingCalendar from '../components/BookingCalendar.jsx';
-
-const url = new URL(Astro.request.url);
-const nombre = url.searchParams.get('nombre') || '';
-const email = url.searchParams.get('email') || '';
-const phone = url.searchParams.get('phone') || '';
-const clinica = url.searchParams.get('clinica') || '';
-const contactId = url.searchParams.get('contactId') || '';
+import AgendarPage from '../components/AgendarPage.jsx';
 ---
 
 <BaseLayout title="Agendar Cita - Hospital Capilar">
-  <div class="min-h-screen bg-[#F7F8FA]">
-    <div class="bg-[#2C3E50] text-white text-center py-3 px-4 text-sm font-semibold">
-      Hospital Capilar — Agendar Consulta Diagnóstica
-    </div>
-
-    <div class="max-w-lg mx-auto px-4 py-6">
-      {/* Datos del paciente */}
-      {nombre && (
-        <div class="bg-white rounded-2xl border border-gray-100 p-4 mb-4 shadow-sm">
-          <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Paciente</p>
-          <p class="font-bold text-gray-900">{nombre}</p>
-          {email && <p class="text-sm text-gray-500">{email}</p>}
-          {phone && <p class="text-sm text-gray-500">{phone}</p>}
-        </div>
-      )}
-
-      {/* Alerta si faltan datos */}
-      {!nombre && (
-        <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-4">
-          <p class="text-amber-800 text-sm font-medium">
-            No se han recibido datos del paciente. Asegúrate de usar el link desde el CRM.
-          </p>
-        </div>
-      )}
-
-      <div class="bg-[#4CA994]/5 border border-[#4CA994]/20 rounded-2xl p-5">
-        <BookingCalendar
-          client:only="react"
-          nombre={nombre}
-          email={email}
-          telefono={phone}
-          ubicacion={clinica}
-          contactId={contactId}
-        />
-      </div>
-    </div>
-  </div>
+  <AgendarPage client:only="react" />
 </BaseLayout>
