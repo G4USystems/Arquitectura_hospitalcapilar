@@ -2,11 +2,13 @@ const crypto = require('crypto');
 const { updateLeadByEmail } = require('./lib/firebase-admin');
 
 const GHL_BASE = 'https://services.leadconnectorhq.com';
+const KOIBOX_BASE = 'https://api.koibox.cloud/api';
 const POSTHOG_HOST = 'https://eu.i.posthog.com';
 
-// Custom field IDs
+// GHL opportunity custom field IDs
 const OPP_CF = {
   tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',
+  koibox_id:          'x1MAP0Om3rUW3a10ZiUe',
 };
 
 exports.handler = async (event) => {
@@ -38,15 +40,20 @@ exports.handler = async (event) => {
 
       const contactId = session.metadata?.contactId || session.payment_intent?.metadata?.contactId;
 
-      // Update GHL opportunity payment_status (bono195/bono70)
+      // Update GHL opportunity payment_status + get koibox_id for Koibox sync
+      let koiboxId = null;
       if (contactId && ghlKey) {
-        await updateGHLOpportunity(contactId, ghlKey);
+        koiboxId = await updateGHLOpportunity(contactId, ghlKey, session.amount_total);
       }
 
-      // Add note to contact in GHL
+      // Add note to contact in GHL + manage tags
       if (contactId && ghlKey) {
         await addGHLNote(contactId, ghlKey, session);
+        await updatePaymentTags(contactId, ghlKey);
       }
+
+      // Sync payment to Koibox (appointment notes + client notes)
+      await syncPaymentToKoibox(session.customer_email, koiboxId, session);
 
       // Update Firestore lead: paymentStatus → paid
       await updateLeadByEmail(session.customer_email, {
@@ -113,39 +120,65 @@ function verifyWebhookSignature(payload, sigHeader, secret) {
 
 /**
  * Find and update the opportunity's tratamiento_status to 'paid'.
+ * Returns the koibox_id from the opportunity (if a Koibox appointment already exists).
  */
-async function updateGHLOpportunity(contactId, apiKey) {
+async function updateGHLOpportunity(contactId, apiKey, amountCents) {
   const ghlHeaders = {
     'Authorization': `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
     'Version': '2021-07-28',
   };
 
+  const locationId = process.env.VITE_GHL_LOCATION_ID || 'U4SBRYIlQtGBDHLFwEUf';
+  const amount = amountCents / 100;
+
   try {
-    const searchRes = await fetch(`${GHL_BASE}/opportunities/search?contact_id=${contactId}&status=open`, {
-      headers: ghlHeaders,
-    });
+    // Search for open opportunities for this contact
+    const searchRes = await fetch(
+      `${GHL_BASE}/opportunities/search?location_id=${locationId}&contact_id=${contactId}&status=open`,
+      { headers: ghlHeaders }
+    );
     const searchData = await searchRes.json();
     const opportunities = searchData?.opportunities || [];
 
     if (opportunities.length === 0) {
       console.log('[Stripe Webhook] No open opportunities found for contact:', contactId);
-      return;
+      return null;
     }
 
     const opp = opportunities[0];
+
+    // GET opportunity details to read koibox_id custom field
+    let koiboxId = null;
+    try {
+      const detailRes = await fetch(`${GHL_BASE}/opportunities/${opp.id}`, { headers: ghlHeaders });
+      if (detailRes.ok) {
+        const detail = await detailRes.json();
+        const cfs = detail?.opportunity?.customFields || [];
+        const koiboxField = cfs.find(f => f.id === OPP_CF.koibox_id);
+        koiboxId = koiboxField?.value || null;
+      }
+    } catch (err) {
+      console.log('[Stripe Webhook] Failed to read opportunity details:', err.message);
+    }
+
+    // Update opportunity with payment status
     const updateRes = await fetch(`${GHL_BASE}/opportunities/${opp.id}`, {
       method: 'PUT',
       headers: ghlHeaders,
       body: JSON.stringify({
+        monetaryValue: amount,
         customFields: [
           { id: OPP_CF.tratamiento_status, field_value: 'paid' },
         ],
       }),
     });
-    console.log('[Stripe Webhook] Opportunity updated:', opp.id, 'tratamiento_status: paid, status:', updateRes.status);
+    console.log('[Stripe Webhook] Opportunity updated:', opp.id, 'status:', updateRes.status, 'koiboxId:', koiboxId);
+
+    return koiboxId;
   } catch (err) {
     console.log('[Stripe Webhook] GHL opportunity update failed:', err.message);
+    return null;
   }
 }
 
@@ -171,6 +204,101 @@ async function addGHLNote(contactId, apiKey, session) {
     console.log('[Stripe Webhook] Payment note added to contact:', contactId);
   } catch (err) {
     console.log('[Stripe Webhook] Note creation failed:', err.message);
+  }
+}
+
+/**
+ * Update GHL tags: remove bono_pendiente, add bono_pagado.
+ */
+async function updatePaymentTags(contactId, apiKey) {
+  const ghlHeaders = {
+    'Authorization': `Bearer ${apiKey}`,
+    'Content-Type': 'application/json',
+    'Version': '2021-07-28',
+  };
+
+  try {
+    // Remove bono_pendiente tag
+    await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
+      method: 'DELETE',
+      headers: ghlHeaders,
+      body: JSON.stringify({ tags: ['bono_pendiente'] }),
+    });
+    // Add bono_pagado tag
+    await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
+      method: 'POST',
+      headers: ghlHeaders,
+      body: JSON.stringify({ tags: ['bono_pagado'] }),
+    });
+    console.log('[Stripe Webhook] Tags updated: bono_pendiente → bono_pagado for contact:', contactId);
+  } catch (err) {
+    console.log('[Stripe Webhook] Tag update failed:', err.message);
+  }
+}
+
+/**
+ * Sync payment confirmation to Koibox:
+ * - If appointment exists (koiboxId): update appointment notes
+ * - Search client by email: update client notes
+ */
+async function syncPaymentToKoibox(email, koiboxId, session) {
+  const koiboxKey = process.env.KOIBOX_API_KEY;
+  if (!koiboxKey) {
+    console.log('[Stripe→Koibox] No KOIBOX_API_KEY, skipping sync');
+    return;
+  }
+
+  const koiboxHeaders = {
+    'X-Koibox-Key': koiboxKey,
+    'Content-Type': 'application/json',
+  };
+
+  const amount = ((session.amount_total || 0) / 100).toFixed(2);
+  const paymentNote = `✅ BONO DIAGNÓSTICO PAGADO (${amount}€) — Stripe: ${session.id} — ${new Date().toISOString()}`;
+
+  // 1. Update appointment notes if koibox appointment exists
+  if (koiboxId) {
+    try {
+      // GET current appointment to preserve existing notes
+      const getRes = await fetch(`${KOIBOX_BASE}/agenda/${koiboxId}/`, { headers: koiboxHeaders });
+      if (getRes.ok) {
+        const appt = await getRes.json();
+        const existingNotes = appt.notas || '';
+        await fetch(`${KOIBOX_BASE}/agenda/${koiboxId}/`, {
+          method: 'PATCH',
+          headers: koiboxHeaders,
+          body: JSON.stringify({ notas: `${existingNotes}\n${paymentNote}`.trim() }),
+        });
+        console.log('[Stripe→Koibox] Appointment notes updated:', koiboxId);
+      }
+    } catch (err) {
+      console.log('[Stripe→Koibox] Appointment update failed:', err.message);
+    }
+  }
+
+  // 2. Update client notes
+  if (email) {
+    try {
+      const searchRes = await fetch(
+        `${KOIBOX_BASE}/clientes/?email=${encodeURIComponent(email)}`,
+        { headers: koiboxHeaders }
+      );
+      if (searchRes.ok) {
+        const data = await searchRes.json();
+        if (data.count > 0) {
+          const client = data.results[0];
+          const existingNotes = client.notas || '';
+          await fetch(`${KOIBOX_BASE}/clientes/${client.id}/`, {
+            method: 'PATCH',
+            headers: koiboxHeaders,
+            body: JSON.stringify({ notas: `${existingNotes}\n${paymentNote}`.trim() }),
+          });
+          console.log('[Stripe→Koibox] Client notes updated:', client.id);
+        }
+      }
+    } catch (err) {
+      console.log('[Stripe→Koibox] Client update failed:', err.message);
+    }
   }
 }
 

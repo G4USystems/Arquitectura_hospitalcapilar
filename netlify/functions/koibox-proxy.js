@@ -296,6 +296,52 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
 
   const employeeId = EMPLOYEES[clinica] || EMPLOYEES.madrid;
 
+  // 0. Check GHL for payment status + ECP (to set notes and tags)
+  let bonoPaid = false;
+  let contactEcp = '';
+  if (ghl_contact_id) {
+    try {
+      const ghlKey = process.env.VITE_GHL_API_KEY;
+      const locationId = process.env.VITE_GHL_LOCATION_ID || 'U4SBRYIlQtGBDHLFwEUf';
+      if (ghlKey) {
+        const ghlHeaders = {
+          'Authorization': `Bearer ${ghlKey}`,
+          'Content-Type': 'application/json',
+          'Version': '2021-07-28',
+        };
+        // Get contact to read ECP
+        const contactRes = await fetch(`${GHL_BASE}/contacts/${ghl_contact_id}`, { headers: ghlHeaders });
+        if (contactRes.ok) {
+          const contactData = await contactRes.json();
+          const cfs = contactData?.contact?.customFields || [];
+          const ecpField = cfs.find(f => f.id === 'cFIcdJlT9sfnC3KMSwDD');
+          contactEcp = ecpField?.value || '';
+        }
+        // Search opportunity for payment status
+        const oppSearchRes = await fetch(
+          `${GHL_BASE}/opportunities/search?location_id=${locationId}&contact_id=${ghl_contact_id}&status=open`,
+          { headers: ghlHeaders }
+        );
+        if (oppSearchRes.ok) {
+          const oppData = await oppSearchRes.json();
+          const opp = (oppData?.opportunities || [])[0];
+          if (opp?.id) {
+            const oppDetailRes = await fetch(`${GHL_BASE}/opportunities/${opp.id}`, { headers: ghlHeaders });
+            if (oppDetailRes.ok) {
+              const oppDetail = await oppDetailRes.json();
+              const oppCfs = oppDetail?.opportunity?.customFields || [];
+              const statusField = oppCfs.find(f => f.id === 'Hk81fRW2HaTqlry4I1L0');
+              bonoPaid = statusField?.value === 'paid';
+            }
+          }
+        }
+        console.log('[Koibox] GHL check — ECP:', contactEcp, 'bonoPaid:', bonoPaid);
+      }
+    } catch (err) {
+      console.log('[Koibox] GHL payment check failed:', err.message);
+    }
+  }
+
   // 1. Sync client first (find or create)
   let clientId = body.koibox_client_id;
   if (!clientId && (email || movil)) {
@@ -318,7 +364,9 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
     hora_fin,
     user: employeeId,
     servicios: [SERVICES.primera_consulta_diagnostico],
-    notas: notas || 'Reserva desde quiz online — Bono Diagnóstico 195€ pagado',
+    notas: notas || (bonoPaid
+      ? 'Reserva desde quiz online — ✅ BONO DIAGNÓSTICO PAGADO'
+      : 'Reserva desde quiz online — Diagnóstico Capilar'),
   };
   if (clientId) {
     appointmentPayload.cliente = clientId;
@@ -348,7 +396,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
   // 3. Sync to GHL: add tags + note + update opportunity stage
   let ghlSync = { status: 'skipped' };
   try {
-    ghlSync = await syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, clinica, koiboxId: String(appointmentData.id || ''), ghl_contact_id });
+    ghlSync = await syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, clinica, koiboxId: String(appointmentData.id || ''), ghl_contact_id, bonoPaid, contactEcp });
   } catch (err) {
     ghlSync = { status: 'error', error: err.message };
     console.log('[Koibox→GHL] Sync failed:', err.message);
@@ -399,7 +447,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
  * - Add note with appointment details
  * - Update opportunity: stage → Booked, tratamiento_status → booked, koibox_id, fecha, hora
  */
-async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, clinica, koiboxId, ghl_contact_id }) {
+async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, clinica, koiboxId, ghl_contact_id, bonoPaid, contactEcp }) {
   const ghlKey = process.env.VITE_GHL_API_KEY;
   if (!ghlKey) {
     console.log('[Koibox→GHL] No GHL API key, skipping sync');
@@ -497,8 +545,6 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
     koibox_id:          'x1MAP0Om3rUW3a10ZiUe',  // koibox_id (TEXT)
     appointment_date:   'UTUymkHREIxPmmMzx5N1',  // appointment_date (DATE)
     appointment_hour:   'ftEDr8jnG1GEe5dObXCl',  // Appointment hour (TEXT)
-    fecha_cita_opp:     'MbxjAvp2tpx2nUMCjX9L',  // fecha_cita_opp (DATE)
-    hora_cita_opp:      'AAvG0Rn1uWZ3LEpacKuZ',  // hora_cita_opp (TEXT)
   };
 
   try {
@@ -516,8 +562,6 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
         { id: OPP_CF_BOOKING.koibox_id, field_value: koiboxId || '' },
         { id: OPP_CF_BOOKING.appointment_date, field_value: fecha || '' },
         { id: OPP_CF_BOOKING.appointment_hour, field_value: hora_inicio || '' },
-        { id: OPP_CF_BOOKING.fecha_cita_opp, field_value: fecha || '' },
-        { id: OPP_CF_BOOKING.hora_cita_opp, field_value: hora_inicio || '' },
       ];
       await fetch(`${GHL_BASE}/opportunities/${opp.id}`, {
         method: 'PUT',
@@ -531,6 +575,35 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
     }
   } catch (err) {
     console.log('[Koibox→GHL] Opportunity update failed:', err.message);
+  }
+
+  // 6. Tag bono_pendiente for women ECPs who haven't paid yet
+  // ECP values from quiz: 'Mujer con caida hormonal', 'Caida postparto'
+  const WOMEN_ECPS = ['mujer con caida hormonal', 'caida postparto'];
+  const isWomanEcp = contactEcp && WOMEN_ECPS.some(e => contactEcp.toLowerCase().includes(e));
+
+  if (isWomanEcp && !bonoPaid) {
+    try {
+      await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({ tags: ['bono_pendiente'] }),
+      });
+      console.log('[Koibox→GHL] Tag bono_pendiente added (ECP mujer, no payment yet)');
+    } catch (err) {
+      console.log('[Koibox→GHL] Tag bono_pendiente failed:', err.message);
+    }
+  } else if (isWomanEcp && bonoPaid) {
+    try {
+      await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
+        method: 'POST',
+        headers: ghlHeaders,
+        body: JSON.stringify({ tags: ['bono_pagado'] }),
+      });
+      console.log('[Koibox→GHL] Tag bono_pagado added (ECP mujer, already paid)');
+    } catch (err) {
+      console.log('[Koibox→GHL] Tag bono_pagado failed:', err.message);
+    }
   }
 
   return { status: 'ok', contactId };
