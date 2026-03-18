@@ -10,7 +10,7 @@ const CLINICS = {
 const DAY_NAMES = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
-const BookingCalendar = ({ ubicacion, nombre, email, telefono, onBooked, onBack }) => {
+const BookingCalendar = ({ ubicacion, nombre, email, telefono, contactId, onBooked, onBack }) => {
   const [selectedClinic, setSelectedClinic] = useState(ubicacion || null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -70,6 +70,7 @@ const BookingCalendar = ({ ubicacion, nombre, email, telefono, onBooked, onBack 
           hora_inicio: selectedSlot.hora_inicio,
           hora_fin: selectedSlot.hora_fin,
           clinica: selectedClinic,
+          ...(contactId && { ghl_contact_id: contactId }),
         }),
       });
       const data = await res.json();
