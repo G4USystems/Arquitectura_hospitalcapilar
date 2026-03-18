@@ -8,9 +8,11 @@ const OPP_CF = {
   lead_priority:       'l99Opesqh9cJBLxSPs4z',
   agent_message:       'cVtN5KboKd2R1cf1s7QA',
   tratamiento_status:  'Hk81fRW2HaTqlry4I1L0',
-  fecha_cita:          '6SmcwU7myCOv7FsNPkX8',
-  hora_cita:           'xI1E3qSGLVgJdBujrWcI',
-  koibox_booking_id:   'EDiHi8YfC913Mve0DRsv',
+  appointment_date:    'UTUymkHREIxPmmMzx5N1',
+  appointment_hour:    'ftEDr8jnG1GEe5dObXCl',
+  koibox_booking_id:   'x1MAP0Om3rUW3a10ZiUe',
+  fecha_cita_opp:      'MbxjAvp2tpx2nUMCjX9L',
+  hora_cita_opp:       'AAvG0Rn1uWZ3LEpacKuZ',
 };
 
 // Salesforce Web-To-Lead field mapping

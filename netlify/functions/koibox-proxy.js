@@ -493,10 +493,12 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
   const PIPELINE_STAGE_BOOKED = 'f9e5c1cf-7701-4883-ac96-f16b3d78c0d5';
   // Opportunity custom field IDs
   const OPP_CF_BOOKING = {
-    tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',
-    koibox_id:          'EDiHi8YfC913Mve0DRsv',
-    fecha_cita:         '6SmcwU7myCOv7FsNPkX8',
-    hora_cita:          'xI1E3qSGLVgJdBujrWcI',
+    tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',  // Tratamiento Status (SINGLE_OPTIONS)
+    koibox_id:          'x1MAP0Om3rUW3a10ZiUe',  // koibox_id (TEXT)
+    appointment_date:   'UTUymkHREIxPmmMzx5N1',  // appointment_date (DATE)
+    appointment_hour:   'ftEDr8jnG1GEe5dObXCl',  // Appointment hour (TEXT)
+    fecha_cita_opp:     'MbxjAvp2tpx2nUMCjX9L',  // fecha_cita_opp (DATE)
+    hora_cita_opp:      'AAvG0Rn1uWZ3LEpacKuZ',  // hora_cita_opp (TEXT)
   };
 
   try {
@@ -512,8 +514,10 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
       const customFields = [
         { id: OPP_CF_BOOKING.tratamiento_status, field_value: 'booked' },
         { id: OPP_CF_BOOKING.koibox_id, field_value: koiboxId || '' },
-        { id: OPP_CF_BOOKING.fecha_cita, field_value: fecha || '' },
-        { id: OPP_CF_BOOKING.hora_cita, field_value: hora_inicio || '' },
+        { id: OPP_CF_BOOKING.appointment_date, field_value: fecha || '' },
+        { id: OPP_CF_BOOKING.appointment_hour, field_value: hora_inicio || '' },
+        { id: OPP_CF_BOOKING.fecha_cita_opp, field_value: fecha || '' },
+        { id: OPP_CF_BOOKING.hora_cita_opp, field_value: hora_inicio || '' },
       ];
       await fetch(`${GHL_BASE}/opportunities/${opp.id}`, {
         method: 'PUT',
