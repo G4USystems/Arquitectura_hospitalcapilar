@@ -96,7 +96,7 @@ exports.handler = async (event) => {
     const contactId = contactData?.contact?.id || contactData?.meta?.contactId || contactData?.id || contactData?.contactId;
     console.log('[GHL] Contact response status:', contactRes.status, 'contactId:', contactId, 'duplicate:', !!contactData?.meta?.contactId);
 
-    // 1b. Add "New Lead" tag to contact
+    // 1b. Add "new_lead" tag + populate link_agendar on contact
     if (contactId) {
       try {
         await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
@@ -107,6 +107,23 @@ exports.handler = async (event) => {
         console.log('[GHL] Tags added to contact:', contactId);
       } catch (tagErr) {
         console.log('[GHL] Tag addition failed:', tagErr.message);
+      }
+
+      // Populate link_agendar so Noemí can open booking page from the contact card
+      try {
+        const bookingUrl = `https://diagnostico.hospitalcapilar.com/agendar?contactId=${contactId}&nombre=${encodeURIComponent((body.firstName || '') + ' ' + (body.lastName || ''))}&email=${encodeURIComponent(body.email || '')}&phone=${encodeURIComponent(body.phone || '')}`;
+        await fetch(`${GHL_BASE}/contacts/${contactId}`, {
+          method: 'PUT',
+          headers: ghlHeaders,
+          body: JSON.stringify({
+            customFields: [
+              { id: 'UdbclFWU2YGw0YYup4vm', field_value: bookingUrl },
+            ],
+          }),
+        });
+        console.log('[GHL] link_agendar set on contact:', contactId);
+      } catch (linkErr) {
+        console.log('[GHL] link_agendar update failed:', linkErr.message);
       }
     }
 
