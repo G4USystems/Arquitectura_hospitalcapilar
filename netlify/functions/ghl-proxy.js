@@ -8,6 +8,10 @@ const OPP_CF = {
   lead_priority:       'l99Opesqh9cJBLxSPs4z',
   agent_message:       'cVtN5KboKd2R1cf1s7QA',
   tratamiento_status:  'Hk81fRW2HaTqlry4I1L0',
+  // TODO: fill IDs once Philippe creates these fields in GHL
+  fecha_cita:          'PENDING_ID',
+  hora_cita:           'PENDING_ID',
+  koibox_booking_id:   'PENDING_ID',
 };
 
 // Salesforce Web-To-Lead field mapping
@@ -98,7 +102,7 @@ exports.handler = async (event) => {
         await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
           method: 'POST',
           headers: ghlHeaders,
-          body: JSON.stringify({ tags: ['New Lead', 'Quiz Diagnostico'] }),
+          body: JSON.stringify({ tags: ['new_lead'] }),
         });
         console.log('[GHL] Tags added to contact:', contactId);
       } catch (tagErr) {

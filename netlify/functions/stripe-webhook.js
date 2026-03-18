@@ -6,8 +6,7 @@ const POSTHOG_HOST = 'https://eu.i.posthog.com';
 
 // Custom field IDs
 const OPP_CF = {
-  tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',  // opportunity level
-  payment_status:     'Hk81fRW2HaTqlry4I1L0',  // same field, clearer name
+  tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',
 };
 
 exports.handler = async (event) => {
@@ -41,7 +40,7 @@ exports.handler = async (event) => {
 
       // Update GHL opportunity payment_status (bono195/bono70)
       if (contactId && ghlKey) {
-        await updateGHLOpportunity(contactId, ghlKey, session.amount_total);
+        await updateGHLOpportunity(contactId, ghlKey);
       }
 
       // Add note to contact in GHL
@@ -113,23 +112,16 @@ function verifyWebhookSignature(payload, sigHeader, secret) {
 }
 
 /**
- * Find and update the opportunity's payment_status based on amount.
- * Values: bono195, bono70, refund
+ * Find and update the opportunity's tratamiento_status to 'paid'.
  */
-async function updateGHLOpportunity(contactId, apiKey, amountCents) {
+async function updateGHLOpportunity(contactId, apiKey) {
   const ghlHeaders = {
     'Authorization': `Bearer ${apiKey}`,
     'Content-Type': 'application/json',
     'Version': '2021-07-28',
   };
 
-  // Determine payment_status from amount
-  const amount = amountCents / 100;
-  let paymentStatus = 'bono195';
-  if (amount <= 70) paymentStatus = 'bono70';
-
   try {
-    // Search for open opportunities for this contact
     const searchRes = await fetch(`${GHL_BASE}/opportunities/search?contact_id=${contactId}&status=open`, {
       headers: ghlHeaders,
     });
@@ -141,19 +133,17 @@ async function updateGHLOpportunity(contactId, apiKey, amountCents) {
       return;
     }
 
-    // Update the most recent opportunity
     const opp = opportunities[0];
     const updateRes = await fetch(`${GHL_BASE}/opportunities/${opp.id}`, {
       method: 'PUT',
       headers: ghlHeaders,
       body: JSON.stringify({
-        monetaryValue: amount,
         customFields: [
-          { id: OPP_CF.payment_status, field_value: paymentStatus },
+          { id: OPP_CF.tratamiento_status, field_value: 'paid' },
         ],
       }),
     });
-    console.log('[Stripe Webhook] Opportunity updated:', opp.id, 'payment_status:', paymentStatus, 'status:', updateRes.status);
+    console.log('[Stripe Webhook] Opportunity updated:', opp.id, 'tratamiento_status: paid, status:', updateRes.status);
   } catch (err) {
     console.log('[Stripe Webhook] GHL opportunity update failed:', err.message);
   }

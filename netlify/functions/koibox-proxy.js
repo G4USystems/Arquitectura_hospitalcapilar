@@ -347,7 +347,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
   // 3. Sync to GHL: add tags + note + update opportunity stage
   let ghlSync = { status: 'skipped' };
   try {
-    ghlSync = await syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, clinica });
+    ghlSync = await syncAppointmentToGHL({ email, movil, fecha, hora_inicio, koiboxAppointmentId: appointmentData.id });
   } catch (err) {
     ghlSync = { status: 'error', error: err.message };
     console.log('[Koibox→GHL] Sync failed:', err.message);
@@ -398,7 +398,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
  * - Add note with appointment details
  * - Update opportunity stage (if pipeline stage ID is configured)
  */
-async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, clinica }) {
+async function syncAppointmentToGHL({ email, movil, fecha, hora_inicio, koiboxAppointmentId }) {
   const ghlKey = process.env.VITE_GHL_API_KEY;
   if (!ghlKey) {
     console.log('[Koibox→GHL] No GHL API key, skipping sync');
@@ -444,63 +444,15 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
 
   console.log('[Koibox→GHL] Found contact:', contactId);
 
-  // 2. Add tags
-  const clinicaName = clinica ? clinica.charAt(0).toUpperCase() + clinica.slice(1) : '';
-  const tags = ['cita_agendada', `cita_${clinica}`];
-
-  try {
-    await fetch(`${GHL_BASE}/contacts/${contactId}/tags`, {
-      method: 'POST',
-      headers: ghlHeaders,
-      body: JSON.stringify({ tags }),
-    });
-    console.log('[Koibox→GHL] Tags added:', tags.join(', '));
-  } catch (err) {
-    console.log('[Koibox→GHL] Tag addition failed:', err.message);
-  }
-
-  // 3. Save appointment date/time as contact custom fields (for workflow triggers)
-  // Custom field IDs created via GHL API:
-  const APPOINTMENT_CF = {
-    fecha_cita:   'OGEyZPAoKCfGWiMvE1Kn',  // DATE
-    hora_cita:    '2i68Q5xxEg9RAxrayb0r',  // TEXT
-    clinica_cita: 'MOe2rGlgFH51Lm1cYqTQ',  // TEXT
+  // TODO: fill these IDs once Philippe creates the fields in GHL
+  const OPP_CF_BOOKING = {
+    fecha_cita:        'PENDING_ID',
+    hora_cita:         'PENDING_ID',
+    koibox_booking_id: 'PENDING_ID',
   };
 
-  try {
-    await fetch(`${GHL_BASE}/contacts/${contactId}`, {
-      method: 'PUT',
-      headers: ghlHeaders,
-      body: JSON.stringify({
-        customFields: [
-          { id: APPOINTMENT_CF.fecha_cita, field_value: fecha || '' },
-          { id: APPOINTMENT_CF.hora_cita, field_value: hora_inicio || '' },
-          { id: APPOINTMENT_CF.clinica_cita, field_value: clinicaName || '' },
-        ],
-      }),
-    });
-    console.log('[Koibox→GHL] Contact custom fields updated (fecha_cita, hora_cita, clinica_cita)');
-  } catch (err) {
-    console.log('[Koibox→GHL] Contact custom fields update failed:', err.message);
-  }
-
-  // 4. Add note with appointment details
-  const fechaDisplay = fecha || 'sin fecha';
-  const horaDisplay = hora_inicio || 'sin hora';
-  const noteBody = `📅 CITA AGENDADA — Diagnóstico Capilar\nClínica: Hospital Capilar ${clinicaName}\nFecha: ${fechaDisplay}\nHora: ${horaDisplay}\nReservado desde: Quiz online\nFecha de reserva: ${new Date().toISOString()}`;
-
-  try {
-    await fetch(`${GHL_BASE}/contacts/${contactId}/notes`, {
-      method: 'POST',
-      headers: ghlHeaders,
-      body: JSON.stringify({ body: noteBody }),
-    });
-    console.log('[Koibox→GHL] Note added to contact');
-  } catch (err) {
-    console.log('[Koibox→GHL] Note creation failed:', err.message);
-  }
-
-  // 5. Update opportunity: move to "Booked" stage + update tratamiento_status
+  // Opportunity stage ID for "Booked"
+  // TODO: confirm with Philippe once pipeline is set up
   const PIPELINE_STAGE_BOOKED = 'f9e5c1cf-7701-4883-ac96-f16b3d78c0d5';
 
   try {
@@ -519,11 +471,13 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
         body: JSON.stringify({
           pipelineStageId: PIPELINE_STAGE_BOOKED,
           customFields: [
-            { id: 'Hk81fRW2HaTqlry4I1L0', field_value: 'booked' }, // tratamiento_status
+            { id: OPP_CF_BOOKING.fecha_cita,        field_value: fecha || '' },
+            { id: OPP_CF_BOOKING.hora_cita,          field_value: hora_inicio || '' },
+            { id: OPP_CF_BOOKING.koibox_booking_id,  field_value: String(koiboxAppointmentId || '') },
           ],
         }),
       });
-      console.log('[Koibox→GHL] Opportunity moved to Booked stage:', opp.id);
+      console.log('[Koibox→GHL] Opportunity updated — Booked, fecha_cita, hora_cita, koibox_booking_id');
     }
   } catch (err) {
     console.log('[Koibox→GHL] Opportunity update failed:', err.message);
