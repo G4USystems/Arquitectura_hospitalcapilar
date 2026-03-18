@@ -209,7 +209,7 @@ export const NICHOS = {
       { q: '¿Por qué el minoxidil no me funciona?', a: 'Hay más de 20 tipos de alopecia. Si no sabes cuál tienes, el tratamiento puede no ser el adecuado. Un diagnóstico preciso es el primer paso.' },
       { q: '¿Los suplementos anticaída sirven para algo?', a: 'Algunos pueden complementar un tratamiento médico, pero por sí solos no resuelven una alopecia androgenética ni hormonal. Primero diagnóstico, después tratamiento.' },
       { q: '¿Necesito trasplante o tratamiento médico?', a: 'Depende de tu tipo de alopecia, tu edad y el grado de pérdida. Nuestros médicos te lo explican con datos reales después del diagnóstico.' },
-      { q: '¿Cuánto cuesta dejar de adivinar?', a: 'Un diagnóstico completo cuesta 195€ y se descuenta íntegro si inicias tratamiento. Compáralo con los €500+ que ya has gastado sin resultado.' },
+      { q: '¿Cuánto cuesta dejar de adivinar?', a: 'El diagnóstico completo se descuenta íntegro si inicias tratamiento. Compáralo con los €500+ que ya has gastado sin resultado.' },
     ],
     tags: ['nicho-farmacia-sin-salida'],
   },

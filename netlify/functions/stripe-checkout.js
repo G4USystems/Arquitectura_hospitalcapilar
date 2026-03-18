@@ -43,6 +43,7 @@ exports.handler = async (event) => {
     params.append('metadata[ecp]', ecp || '');
     params.append('metadata[ubicacion]', ubicacion || '');
     params.append('metadata[source]', 'quiz_hospitalcapilar');
+    params.append('metadata[bono_price]', amount / 100);
     params.append('payment_intent_data[metadata][contactId]', contactId || '');
     params.append('payment_intent_data[metadata][nombre]', nombre || '');
     params.append('payment_intent_data[metadata][ecp]', ecp || '');

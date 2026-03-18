@@ -24,12 +24,12 @@ const OBJECTIONS = {
   'Mujer con caida hormonal': [
     { myth: 'No sé si mi caída tiene solución', truth: 'Un diagnóstico con tricoscopía + analítica hormonal te da la respuesta en 30 minutos.' },
     { myth: 'Ya fui a otro médico y no me dijeron nada', truth: 'Nuestro equipo médico especializado en salud capilar cruza tu perfil hormonal con un estudio capilar completo. Nadie más los mira juntos.' },
-    { myth: 'Es muy caro para no saber si funciona', truth: 'Los 195€ se descuentan íntegros si inicias tratamiento.' },
+    { myth: 'Es muy caro para no saber si funciona', truth: null }, // dynamic — uses bonoPrice
   ],
   'Caida postparto': [
     { myth: 'Me dicen que es normal y que se pasará solo', truth: 'En el 70% de casos sí. Pero si hay AGA subyacente, cada mes sin actuar es pelo que no vuelve.' },
     { myth: 'Mi ginecóloga no le da importancia', truth: 'Los ginecólogos se centran en hormonas. Nuestro equipo médico capilar cruza tu perfil hormonal con un estudio del pelo para encontrar la causa real.' },
-    { myth: 'Es muy caro para no saber si funciona', truth: 'Los 195€ se descuentan íntegros si inicias tratamiento.' },
+    { myth: 'Es muy caro para no saber si funciona', truth: null }, // dynamic — uses bonoPrice
   ],
   'Sin diagnostico gateway': [
     { myth: 'Seguro que no es nada, ya se pasará', truth: 'Puede ser estrés temporal… o el inicio de una alopecia. Solo un diagnóstico profesional te saca de dudas.' },
@@ -39,20 +39,27 @@ const OBJECTIONS = {
   'OTC frustrado sin resultado': [
     { myth: 'Si el minoxidil no funciona, no hay nada que hacer', truth: 'El 60% no responde a minoxidil sin diagnóstico. No es que no funcione — es que puede no ser lo que necesitas.' },
     { myth: 'Los suplementos deberían ser suficientes', truth: 'Olistic, Iraltone, Pilexil… pueden complementar, pero sin diagnóstico es tirar dinero.' },
-    { myth: 'Ya me gasté demasiado, para qué gastar más', truth: 'Un diagnóstico de 195€ (descontable) puede ahorrarte años de productos que no funcionan.' },
+    { myth: 'Ya me gasté demasiado, para qué gastar más', truth: null }, // dynamic — uses bonoPrice
   ],
 };
 
-const FAQS = [
+const getfaqs = (price) => [
   { q: '¿Qué incluye exactamente el diagnóstico?', a: 'Tricoscopía digital (microscopio capilar de alta resolución), analítica hormonal completa, valoración médica personalizada de 30 minutos y plan de tratamiento detallado.' },
-  { q: '¿Los 195€ se descuentan si hago tratamiento?', a: 'Sí. Si decides iniciar tratamiento en Hospital Capilar, los 195€ del diagnóstico se descuentan íntegros del coste.' },
+  { q: `¿Los ${price}€ se descuentan si hago tratamiento?`, a: `Sí. Si decides iniciar tratamiento en Hospital Capilar, los ${price}€ del diagnóstico se descuentan íntegros del coste.` },
   { q: '¿Me van a intentar vender algo?', a: 'No. Nuestros médicos te diagnostican con datos objetivos (microscopio + analítica) y te explican tus opciones. Si no necesitas tratamiento, te lo decimos.' },
 ];
 
-const PaywallOverlay = ({ ecp, nombre, onPay, onClose, onCallRequest }) => {
+const PaywallOverlay = ({ ecp, nombre, onPay, onClose, onCallRequest, bonoPrice = 195 }) => {
   const [openFaq, setOpenFaq] = useState(null);
   const testimonials = TESTIMONIALS_BY_ECP[ecp] || TESTIMONIALS_BY_ECP['Mujer con caida hormonal'];
-  const objections = OBJECTIONS[ecp] || OBJECTIONS['Mujer con caida hormonal'];
+  const dynamicTruth = `Los ${bonoPrice}€ se descuentan íntegros si inicias tratamiento.`;
+  const dynamicOtcTruth = `Un diagnóstico de ${bonoPrice}€ (descontable) puede ahorrarte años de productos que no funcionan.`;
+  const rawObjections = OBJECTIONS[ecp] || OBJECTIONS['Mujer con caida hormonal'];
+  const objections = rawObjections.map(obj => ({
+    ...obj,
+    truth: obj.truth ?? (obj.myth.includes('gasté') ? dynamicOtcTruth : dynamicTruth),
+  }));
+  const faqs = getfaqs(bonoPrice);
   const firstName = (nombre || 'Paciente').split(' ')[0];
 
   return (
@@ -132,7 +139,7 @@ const PaywallOverlay = ({ ecp, nombre, onPay, onClose, onCallRequest }) => {
             DIAGNÓSTICO COMPLETO
           </div>
           <div className="text-center pt-2">
-            <span className="text-4xl font-extrabold text-gray-900">195€</span>
+            <span className="text-4xl font-extrabold text-gray-900">{bonoPrice}€</span>
             <p className="text-sm text-gray-500 mt-1">Pago único · Se descuenta si inicias tratamiento</p>
           </div>
         </div>
@@ -162,7 +169,7 @@ const PaywallOverlay = ({ ecp, nombre, onPay, onClose, onCallRequest }) => {
         <div className="mb-8">
           <h3 className="text-base font-bold text-gray-900 text-center mb-4">Preguntas frecuentes</h3>
           <div className="space-y-2">
-            {FAQS.map((faq, i) => (
+            {faqs.map((faq, i) => (
               <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
@@ -196,7 +203,7 @@ const PaywallOverlay = ({ ecp, nombre, onPay, onClose, onCallRequest }) => {
             onClick={onPay}
             className="w-full bg-[#4CA994] hover:bg-[#3d9480] text-white font-bold text-lg py-4 rounded-xl shadow-lg transition-colors"
           >
-            Reserva tu Diagnóstico — 195€
+            Reserva tu Diagnóstico — {bonoPrice}€
           </button>
           <button
             onClick={onCallRequest}

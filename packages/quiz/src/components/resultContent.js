@@ -13,7 +13,7 @@ export const OBJECTIONS_BY_ECP = {
   'Es Normal': [
     { myth: 'No sé si mi caída tiene solución', truth: 'Un diagnóstico con tricoscopía + analítica hormonal te da la respuesta en 30 minutos.' },
     { myth: 'Ya fui a otro médico y no me dijeron nada', truth: 'Nuestro equipo médico especializado en salud capilar cruza tu perfil hormonal con un estudio capilar completo. Nadie más los mira juntos.' },
-    { myth: 'Es muy caro para no saber si funciona', truth: 'Los 195€ se descuentan íntegros si inicias tratamiento.' },
+    { myth: 'Es muy caro para no saber si funciona', truth: 'El importe se descuenta íntegro si inicias tratamiento.' },
   ],
   'El Espejo': [
     { myth: 'Soy muy joven, seguro que no es nada grave', truth: 'La alopecia NO espera. Cuanto antes actúes, más opciones tienes y mejores resultados.' },
@@ -33,7 +33,7 @@ export const OBJECTIONS_BY_ECP = {
   'Lo Que Vino Con el Bebé': [
     { myth: 'Me dicen que es normal y que se pasará solo', truth: 'En el 70% de casos sí. Pero si hay AGA subyacente, cada mes sin actuar es pelo que no vuelve.' },
     { myth: 'Mi ginecóloga no le da importancia', truth: 'Los ginecólogos se centran en hormonas. Nuestro equipo médico capilar cruza tu perfil hormonal con un estudio del pelo para encontrar la causa real.' },
-    { myth: 'Es muy caro para no saber si funciona', truth: 'Los 195€ se descuentan íntegros si inicias tratamiento.' },
+    { myth: 'Es muy caro para no saber si funciona', truth: 'El importe se descuenta íntegro si inicias tratamiento.' },
   ],
   'Sin diagnostico gateway': [
     { myth: 'Seguro que no es nada, ya se pasará', truth: 'Puede ser estrés temporal… o el inicio de una alopecia que avanza. Solo un diagnóstico profesional te saca de dudas.' },
@@ -43,7 +43,7 @@ export const OBJECTIONS_BY_ECP = {
   'OTC frustrado sin resultado': [
     { myth: 'Si el minoxidil no funciona, no hay nada que hacer', truth: 'El 60% no responde a minoxidil sin diagnóstico. No es que no funcione — es que puede no ser lo que necesitas.' },
     { myth: 'Los suplementos anticaída deberían ser suficientes', truth: 'Olistic, Iraltone, Pilexil… pueden complementar, pero sin saber la causa de tu caída, es tirar dinero.' },
-    { myth: 'Ya me gasté demasiado, para qué gastar más', truth: 'Un diagnóstico de 195€ (descontable) puede ahorrarte años de productos que no funcionan. Compáralo con los €500+ que ya llevas.' },
+    { myth: 'Ya me gasté demasiado, para qué gastar más', truth: 'Un diagnóstico profesional (descontable si inicias tratamiento) puede ahorrarte años de productos que no funcionan. Compáralo con los €500+ que ya llevas.' },
   ],
 };
 
@@ -119,7 +119,7 @@ export const INCLUDED_BY_CTA = {
 export const FAQS_BY_CTA = {
   pagar_bono: [
     { q: '¿Qué incluye exactamente el diagnóstico?', a: 'Tricoscopía digital (microscopio capilar de alta resolución), analítica hormonal completa, valoración médica personalizada de 30 minutos y plan de tratamiento detallado.' },
-    { q: '¿Los 195€ se descuentan si hago tratamiento?', a: 'Sí. Si decides iniciar tratamiento en Hospital Capilar, los 195€ del diagnóstico se descuentan íntegros del coste.' },
+    { q: '¿El importe se descuenta si hago tratamiento?', a: 'Sí. Si decides iniciar tratamiento en Hospital Capilar, el coste del diagnóstico se descuenta íntegro del tratamiento.' },
     { q: '¿Me van a intentar vender algo?', a: 'No. Nuestros médicos te diagnostican con datos objetivos (microscopio + analítica) y te explican tus opciones. Si no necesitas tratamiento, te lo decimos.' },
   ],
   agendar_consulta: [

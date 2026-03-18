@@ -20,7 +20,7 @@ const WhatsAppIcon = ({ size = 24, className = '' }) => (
 // ============================================
 // GENERATE AGENT MESSAGE
 // ============================================
-function generateAgentMessage(answers, result, labels) {
+function generateAgentMessage(answers, result, labels, bonoPrice = 195) {
   const { ecp, score, frame } = result;
   const nombre = (answers.nombre || 'Paciente').split(' ')[0];
   const sexo = answers.sexo === 'hombre' ? 'el paciente' : 'la paciente';
@@ -69,7 +69,7 @@ function generateAgentMessage(answers, result, labels) {
   let objeciones = '';
   if (ecp === 'Hombre con caida sin diagnostico') {
     objeciones = `- "Ya probé minoxidil y no funcionó" → El 40-60% no responde a minoxidil sin saber la causa. Sin diagnóstico, es como tomar pastillas a ciegas. Nosotros primero diagnosticamos y luego tratamos.
-- "Es muy caro" → La consulta de 195€ incluye tricoscopia digital + análisis hormonal + plan personalizado. En farmacias gastarás más sin resultado.
+- "Es muy caro" → La consulta de ${bonoPrice}€ incluye tricoscopia digital + análisis hormonal + plan personalizado. En farmacias gastarás más sin resultado.
 - "No sé si es el momento" → Cuanto más esperas, más folículos se pierden. Los que se van no vuelven. Hoy tienes más pelo que mañana.`;
   } else if (ecp === 'Mujer con caida hormonal') {
     objeciones = `- "Mi médico dice que es estrés" → El 70% de alopecias femeninas tienen componente hormonal. Nuestro equipo médico especializado en salud capilar cruza tu perfil hormonal con un estudio capilar completo — algo que nadie más hace.
@@ -86,7 +86,7 @@ function generateAgentMessage(answers, result, labels) {
   } else if (ecp === 'Post-trasplante mantenimiento') {
     objeciones = `- "Ya me hice el trasplante, ¿necesito más?" → El trasplante mueve pelo, pero no frena la caída del pelo nativo. Sin mantenimiento, en 3-5 años puedes perder más de lo que ganaste.
 - "En la clínica donde me operé no me dijeron nada de esto" → Muchas clínicas solo hacen la cirugía. Nosotros protegemos tu inversión con un plan de mantenimiento personalizado.
-- "¿Cuánto cuesta el mantenimiento?" → Depende de tu caso, pero es una fracción de lo que costó el trasplante. La consulta diagnóstica de 195€ incluye el plan completo.`;
+- "¿Cuánto cuesta el mantenimiento?" → Depende de tu caso, pero es una fracción de lo que costó el trasplante. La consulta diagnóstica de ${bonoPrice}€ incluye el plan completo.`;
   } else if (ecp === 'Caida postparto') {
     objeciones = `- "Me dicen que es normal después del parto" → Sí, es común. El 50% de madres lo sufren. Pero si pasan más de 6 meses y no se recupera, puede haber una alopecia subyacente que el embarazo activó.
 - "Estoy dando el pecho, ¿puedo tratarme?" → Sí, hay tratamientos compatibles con la lactancia. En la consulta evaluamos opciones seguras para ti y tu bebé.
@@ -135,12 +135,12 @@ ${objeciones}
 ESTRATEGIA DE CIERRE
 ${frame === 'FRAME_A' ? `CIERRE DIRECTO: Este lead quiere actuar YA. No divagar — ir directo a agendar cita.
 - "Tenemos disponibilidad esta semana en ${ubicacionLabel}. ¿Prefieres martes o jueves?"
-- Si duda: "La consulta incluye tricoscopia + análisis completo. Los 195€ se descuentan si inicias tratamiento."
+- Si duda: "La consulta incluye tricoscopia + análisis completo. Los ${bonoPrice}€ se descuentan si inicias tratamiento."
 - Urgencia: "Las plazas de esta semana se están llenando, te reservo una ahora mismo."` : ''}${frame === 'FRAME_C' ? `CIERRE CONSULTIVO: Este lead necesita confianza antes de decidir.
 - Primero escuchar, luego proponer. No mencionar precio hasta que pregunte.
 - "¿Qué es lo que más te preocupa de tu situación actual?"
 - Cuando esté listo: "¿Te gustaría que te reserve una consulta para tener un diagnóstico profesional? Así sales de dudas."
-- Si duda del precio: "Los 195€ incluyen TODO el estudio. Y si inicias tratamiento, se descuentan."` : ''}${frame === 'FRAME_D' ? `CIERRE NURTURING: Este lead necesita tiempo. NO presionar.
+- Si duda del precio: "Los ${bonoPrice}€ incluyen TODO el estudio. Y si inicias tratamiento, se descuentan."` : ''}${frame === 'FRAME_D' ? `CIERRE NURTURING: Este lead necesita tiempo. NO presionar.
 - Enviar guía PDF + caso de éxito similar a su perfil
 - Follow-up en 3-5 días: "Hola ${nombre}, ¿pudiste leer la información? ¿Tienes alguna duda?"
 - Si responde: pasar a conversación consultiva (FRAME_C)
@@ -657,7 +657,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
         _utm_medium: utmParams.utm_medium || null,
         _utm_campaign: utmParams.utm_campaign || null,
       };
-      const generated = generateAgentMessage(finalAnswers, result, labels);
+      const generated = generateAgentMessage(finalAnswers, result, labels, bonoPrice);
       agentMessage = generated.message;
       quizAnswersText = generated.quizAnswers;
       readableAnswers = buildReadableAnswers(finalAnswers);
@@ -815,7 +815,19 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
     'Caida postparto',
   ];
 
-  const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/8x2fZh6Qx6wxeES75tbAs04'; // Fallback — Payment Link estático 195€
+  // A/B test bono pricing — 50/50 split, persisted in sessionStorage
+  const STRIPE_LINKS = {
+    195: 'https://buy.stripe.com/8x2fZh6Qx6wxeES75tbAs04',
+    125: 'https://buy.stripe.com/9B614n0s94op9kyblJbAs06',
+  };
+  const [bonoPrice] = useState(() => {
+    const stored = sessionStorage.getItem('hc_bono_price');
+    if (stored === '125' || stored === '195') return Number(stored);
+    const price = Math.random() < 0.5 ? 125 : 195;
+    sessionStorage.setItem('hc_bono_price', String(price));
+    return price;
+  });
+  const STRIPE_CHECKOUT_URL = STRIPE_LINKS[bonoPrice];
 
   const getCTAConfig = (ecp, perfil, frame) => {
     // DERIVACION — artículo educativo
@@ -885,9 +897,9 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
           description: 'Un asesor médico te llamará para entender tu situación concreta y orientarte. Sin compromiso.',
         };
       }
-      // Perfil A o B → cobrar bono 195€ (filtrar + cubrir diagnóstico)
+      // Perfil A o B → cobrar bono (A/B test 125€/195€)
       return {
-        primary: { type: 'pagar_bono', label: 'Reserva tu Diagnóstico — 195€', icon: 'Calendar', style: 'primary', badge: 'DIAGNÓSTICO COMPLETO' },
+        primary: { type: 'pagar_bono', label: `Reserva tu Diagnóstico — ${bonoPrice}€`, icon: 'Calendar', style: 'primary', badge: 'DIAGNÓSTICO COMPLETO' },
         secondary: { type: 'solicitar_llamada', label: '¿Dudas? Te llamamos sin compromiso', icon: 'PhoneCall', style: 'text' },
         heading: 'Tu caso necesita un diagnóstico especializado',
         description: 'La consulta incluye tricoscopía digital + analítica hormonal completa + plan de tratamiento personalizado. En 30 minutos tendrás respuestas.',
@@ -1007,6 +1019,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
         gclid: utmParams.gclid || '',
         referrer: document.referrer || '',
         landing_url: window.location.href || '',
+        bono_price: bonoPrice,
       },
     };
 
@@ -1334,6 +1347,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
           email={answers.email || ''}
           ubicacion={answers.ubicacion || ''}
           onCallRequest={() => handleCTAClick('solicitar_llamada')}
+          bonoPrice={bonoPrice}
         />
       );
     }
@@ -1350,6 +1364,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
             contactId: ghlContactIdRef.current || '',
             ecp: finalResult?.ecp || '',
             ubicacion: answers.ubicacion || '',
+            amount: bonoPrice * 100,
           }),
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1489,7 +1504,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
                 DIAGNÓSTICO COMPLETO
               </div>
               <div className="text-center pt-2">
-                <span className="text-4xl font-extrabold text-gray-900">195€</span>
+                <span className="text-4xl font-extrabold text-gray-900">{bonoPrice}€</span>
                 <p className="text-sm text-gray-500 mt-1">Pago único · Se descuenta si inicias tratamiento</p>
               </div>
             </div>
