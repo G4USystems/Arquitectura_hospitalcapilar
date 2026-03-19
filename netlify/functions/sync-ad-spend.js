@@ -1,0 +1,224 @@
+const POSTHOG_HOST = 'https://eu.i.posthog.com';
+
+/**
+ * Netlify Scheduled Function — runs daily at 06:00 UTC.
+ * Pulls yesterday's campaign spend from Google Ads and Meta Ads,
+ * then sends each campaign as an `ad_spend_daily` event to PostHog.
+ */
+exports.handler = async () => {
+  const yesterday = getYesterday();
+  console.log(`[AdSpend] Syncing spend for ${yesterday}`);
+
+  const results = { google: [], meta: [], errors: [] };
+
+  // Google Ads
+  try {
+    const googleCampaigns = await fetchGoogleAdsSpend(yesterday);
+    results.google = googleCampaigns;
+    console.log(`[AdSpend] Google Ads: ${googleCampaigns.length} campaigns`);
+  } catch (err) {
+    results.errors.push(`Google Ads: ${err.message}`);
+    console.log('[AdSpend] Google Ads error:', err.message);
+  }
+
+  // Meta Ads
+  try {
+    const metaCampaigns = await fetchMetaAdsSpend(yesterday);
+    results.meta = metaCampaigns;
+    console.log(`[AdSpend] Meta Ads: ${metaCampaigns.length} campaigns`);
+  } catch (err) {
+    results.errors.push(`Meta Ads: ${err.message}`);
+    console.log('[AdSpend] Meta Ads error:', err.message);
+  }
+
+  // Send all campaigns to PostHog
+  const allCampaigns = [...results.google, ...results.meta];
+  for (const campaign of allCampaigns) {
+    trackAdSpend(campaign);
+  }
+
+  console.log(`[AdSpend] Done. Sent ${allCampaigns.length} events to PostHog. Errors: ${results.errors.length}`);
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({
+      date: yesterday,
+      google_campaigns: results.google.length,
+      meta_campaigns: results.meta.length,
+      errors: results.errors,
+    }),
+  };
+};
+
+// ─── Google Ads ────────────────────────────────────────
+
+async function fetchGoogleAdsSpend(date) {
+  const clientId = process.env.GOOGLE_ADS_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_ADS_CLIENT_SECRET;
+  const refreshToken = process.env.GOOGLE_ADS_REFRESH_TOKEN;
+  const developerToken = process.env.GOOGLE_ADS_DEVELOPER_TOKEN;
+  const customerId = process.env.GOOGLE_ADS_CUSTOMER_ID;  // 5559727380
+  const mccId = process.env.GOOGLE_ADS_MCC_ID;             // 5915365707
+
+  if (!clientId || !refreshToken || !developerToken || !customerId) {
+    console.log('[AdSpend] Google Ads: missing env vars, skipping');
+    return [];
+  }
+
+  // 1. Get access token from refresh token
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      refresh_token: refreshToken,
+      grant_type: 'refresh_token',
+    }),
+  });
+
+  if (!tokenRes.ok) {
+    throw new Error(`OAuth token refresh failed: ${tokenRes.status}`);
+  }
+
+  const { access_token } = await tokenRes.json();
+
+  // 2. Query campaign metrics
+  const query = `
+    SELECT
+      campaign.name,
+      campaign.id,
+      metrics.cost_micros,
+      metrics.clicks,
+      metrics.impressions,
+      metrics.conversions
+    FROM campaign
+    WHERE segments.date = '${date}'
+      AND metrics.cost_micros > 0
+  `;
+
+  const headers = {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${access_token}`,
+    'developer-token': developerToken,
+  };
+
+  if (mccId) {
+    headers['login-customer-id'] = mccId;
+  }
+
+  const res = await fetch(
+    `https://googleads.googleapis.com/v19/customers/${customerId}/googleAds:searchStream`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ query }),
+    }
+  );
+
+  if (!res.ok) {
+    const errBody = await res.text();
+    throw new Error(`Google Ads API ${res.status}: ${errBody.substring(0, 200)}`);
+  }
+
+  const data = await res.json();
+
+  // searchStream returns array of result batches
+  const campaigns = [];
+  for (const batch of data) {
+    for (const row of (batch.results || [])) {
+      campaigns.push({
+        source: 'google_ads',
+        campaign_name: row.campaign?.name || '',
+        campaign_id: String(row.campaign?.id || ''),
+        spend: (row.metrics?.costMicros || 0) / 1_000_000,
+        clicks: Number(row.metrics?.clicks || 0),
+        impressions: Number(row.metrics?.impressions || 0),
+        conversions: Number(row.metrics?.conversions || 0),
+        date,
+      });
+    }
+  }
+
+  return campaigns;
+}
+
+// ─── Meta Ads ──────────────────────────────────────────
+
+async function fetchMetaAdsSpend(date) {
+  const accessToken = process.env.META_ACCESS_TOKEN;
+  const adAccountId = process.env.META_AD_ACCOUNT_ID; // act_xxxxxxxxx
+
+  if (!accessToken || !adAccountId) {
+    console.log('[AdSpend] Meta Ads: missing env vars, skipping');
+    return [];
+  }
+
+  const params = new URLSearchParams({
+    access_token: accessToken,
+    fields: 'campaign_name,campaign_id,spend,clicks,impressions,actions',
+    level: 'campaign',
+    time_range: JSON.stringify({ since: date, until: date }),
+    filtering: JSON.stringify([
+      { field: 'spend', operator: 'GREATER_THAN', value: '0' },
+    ]),
+  });
+
+  const res = await fetch(
+    `https://graph.facebook.com/v21.0/${adAccountId}/insights?${params}`
+  );
+
+  if (!res.ok) {
+    const errBody = await res.text();
+    throw new Error(`Meta Ads API ${res.status}: ${errBody.substring(0, 200)}`);
+  }
+
+  const data = await res.json();
+
+  return (data.data || []).map(row => {
+    // Extract lead conversions from actions array
+    const leadAction = (row.actions || []).find(a => a.action_type === 'lead');
+    return {
+      source: 'meta_ads',
+      campaign_name: row.campaign_name || '',
+      campaign_id: row.campaign_id || '',
+      spend: parseFloat(row.spend || '0'),
+      clicks: parseInt(row.clicks || '0', 10),
+      impressions: parseInt(row.impressions || '0', 10),
+      conversions: leadAction ? parseInt(leadAction.value, 10) : 0,
+      date,
+    };
+  });
+}
+
+// ─── PostHog ───────────────────────────────────────────
+
+function trackAdSpend(campaign) {
+  const posthogKey = process.env.VITE_POSTHOG_KEY;
+  if (!posthogKey) return;
+
+  const payload = {
+    api_key: posthogKey,
+    event: 'ad_spend_daily',
+    properties: {
+      ...campaign,
+      distinct_id: `ads-${campaign.source}`,
+      $lib: 'server-netlify',
+      timestamp: new Date().toISOString(),
+    },
+  };
+
+  fetch(`${POSTHOG_HOST}/capture/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }).catch(err => console.log('[PostHog] Ad spend capture failed:', err.message));
+}
+
+// ─── Helpers ───────────────────────────────────────────
+
+function getYesterday() {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD
+}

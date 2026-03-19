@@ -11,6 +11,10 @@
   NODE_VERSION = "20"
 
 # PostHog reverse proxy — bypasses adblockers
+# Daily ad spend sync — pulls Google Ads + Meta Ads → PostHog
+[functions."sync-ad-spend"]
+  schedule = "0 6 * * *"
+
 [[redirects]]
   from = "/ingest/static/*"
   to = "https://eu-assets.i.posthog.com/static/:splat"
