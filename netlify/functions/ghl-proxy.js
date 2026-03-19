@@ -11,6 +11,8 @@ const OPP_CF = {
   appointment_date:    'UTUymkHREIxPmmMzx5N1',
   appointment_hour:    'ftEDr8jnG1GEe5dObXCl',
   koibox_booking_id:   'x1MAP0Om3rUW3a10ZiUe',
+  link_agendados:      'eHCAvPZKNph7h15z1gGt',
+  ecp_opo:             'kPJcb7baLswySkhc1knU',
 };
 
 // Salesforce Web-To-Lead field mapping
@@ -83,6 +85,9 @@ exports.handler = async (event) => {
     delete body._contactScore;
     delete body._salesforceData;
 
+    // Extract ECP from contact customFields for opportunity reuse
+    const ecpValue = (body.customFields || []).find(f => f.id === 'cFIcdJlT9sfnC3KMSwDD')?.field_value || '';
+
     // 1. Create or update contact
     const contactRes = await fetch(`${GHL_BASE}/contacts/`, {
       method: 'POST',
@@ -108,9 +113,11 @@ exports.handler = async (event) => {
         console.log('[GHL] Tag addition failed:', tagErr.message);
       }
 
+      // Build bookingUrl (reused for contact + opportunity)
+      const bookingUrl = `https://diagnostico.hospitalcapilar.com/agendar?contactId=${contactId}&nombre=${encodeURIComponent((body.firstName || '') + ' ' + (body.lastName || ''))}&email=${encodeURIComponent(body.email || '')}&phone=${encodeURIComponent(body.phone || '')}`;
+
       // Populate link_agendar so Noemí can open booking page from the contact card
       try {
-        const bookingUrl = `https://diagnostico.hospitalcapilar.com/agendar?contactId=${contactId}&nombre=${encodeURIComponent((body.firstName || '') + ' ' + (body.lastName || ''))}&email=${encodeURIComponent(body.email || '')}&phone=${encodeURIComponent(body.phone || '')}`;
         await fetch(`${GHL_BASE}/contacts/${contactId}`, {
           method: 'PUT',
           headers: ghlHeaders,
@@ -176,6 +183,8 @@ exports.handler = async (event) => {
                 { id: OPP_CF.lead_priority, field_value: priority },
                 { id: OPP_CF.agent_message, field_value: agentMessage },
                 { id: OPP_CF.tratamiento_status, field_value: 'not_paid' },
+                { id: OPP_CF.link_agendados, field_value: bookingUrl },
+                { id: OPP_CF.ecp_opo, field_value: ecpValue },
               ],
             }),
           });
@@ -204,7 +213,14 @@ exports.handler = async (event) => {
       console.log('[GHL] ERROR:', oppError);
     }
 
-    // 4. Send to Salesforce Web-To-Lead (fire-and-forget)
+    // 4. Send welcome email with validation (fire-and-forget)
+    sendWelcomeEmail({
+      email: body.email,
+      nombre: `${body.firstName || ''} ${body.lastName || ''}`.trim(),
+      ecp: ecpValue,
+    });
+
+    // 5. Send to Salesforce Web-To-Lead (fire-and-forget)
     sendToSalesforce({
       firstName: body.firstName,
       lastName: body.lastName,
@@ -287,4 +303,30 @@ function sendToSalesforce(data) {
   })
     .then(res => console.log('[Salesforce] Web-To-Lead sent, status:', res.status))
     .catch(err => console.log('[Salesforce] Web-To-Lead failed:', err.message));
+}
+
+/**
+ * Send welcome email via the send-welcome-email function.
+ * Fire-and-forget: does not block the GHL response.
+ * Includes email validation (format + MX records).
+ */
+function sendWelcomeEmail({ email, nombre, ecp }) {
+  if (!email) return;
+
+  const baseUrl = process.env.URL || 'https://diagnostico.hospitalcapilar.com';
+
+  fetch(`${baseUrl}/.netlify/functions/send-welcome-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, nombre, ecp }),
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        console.log(`[Email] Welcome email failed for ${email}:`, data.reason || data.error);
+      } else {
+        console.log(`[Email] Welcome email sent to ${email}, id: ${data.emailId}`);
+      }
+    })
+    .catch(err => console.log('[Email] Welcome email request failed:', err.message));
 }

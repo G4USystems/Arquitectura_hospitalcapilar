@@ -553,6 +553,10 @@ async function syncCancellationToGHL(contactId, apiKey, koiboxId, reason) {
         // Cancellation is tracked via pipelineStageId only
         body: JSON.stringify({
           pipelineStageId: PIPELINE_STAGE_CANCELLED,
+          customFields: [
+            { id: 'RXAkzlyYHnz4MjYuYaml', field_value: '' },  // fecha_cita_opp
+            { id: 'age1q0r6Ek0PQztGZ4FJ', field_value: '' },   // hora_cita_opp
+          ],
         }),
       });
       console.log('[Cancel→GHL] Opportunity updated to cancelled:', opp.id);
@@ -714,6 +718,8 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
     koibox_id:          'x1MAP0Om3rUW3a10ZiUe',  // koibox_id (TEXT)
     appointment_date:   'UTUymkHREIxPmmMzx5N1',  // appointment_date (DATE)
     appointment_hour:   'ftEDr8jnG1GEe5dObXCl',  // Appointment hour (TEXT)
+    fecha_cita_opp:     'RXAkzlyYHnz4MjYuYaml',  // fecha_cita_opp (DATE) - mirrors contact.fecha_cita
+    hora_cita_opp:      'age1q0r6Ek0PQztGZ4FJ',   // hora_cita_opp (TEXT) - mirrors contact.hora_cita
   };
 
   try {
@@ -732,6 +738,8 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
         { id: OPP_CF_BOOKING.koibox_id, field_value: koiboxId || '' },
         { id: OPP_CF_BOOKING.appointment_date, field_value: fecha || '' },
         { id: OPP_CF_BOOKING.appointment_hour, field_value: hora_inicio || '' },
+        { id: OPP_CF_BOOKING.fecha_cita_opp, field_value: fecha || '' },
+        { id: OPP_CF_BOOKING.hora_cita_opp, field_value: hora_inicio || '' },
       ];
       await fetch(`${GHL_BASE}/opportunities/${opp.id}`, {
         method: 'PUT',
