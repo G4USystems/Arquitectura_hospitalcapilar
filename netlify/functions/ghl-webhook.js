@@ -26,26 +26,30 @@ const STAGE_EVENT_MAP = {
   'lost':      'patient_lost',
 };
 
-function trackServerEvent(eventName, properties = {}, distinctId = null) {
+async function trackServerEvent(eventName, properties = {}, distinctId = null) {
   const posthogKey = process.env.VITE_POSTHOG_KEY;
   if (!posthogKey) return;
 
   const payload = {
     api_key: posthogKey,
     event: eventName,
+    timestamp: new Date().toISOString(),
     properties: {
       ...properties,
       distinct_id: distinctId || 'server-anonymous',
       $lib: 'server-netlify',
-      timestamp: new Date().toISOString(),
     },
   };
 
-  fetch(`${POSTHOG_HOST}/capture/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  }).catch(err => console.log('[PostHog] Server capture failed:', err.message));
+  try {
+    await fetch(`${POSTHOG_HOST}/capture/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.log('[PostHog] Server capture failed:', err.message);
+  }
 }
 
 exports.handler = async (event) => {
@@ -82,7 +86,7 @@ exports.handler = async (event) => {
     // Enrich with lead attribution from Firestore
     const leadSource = await getLeadSourceByEmail(contact_email);
 
-    trackServerEvent(eventName, {
+    await trackServerEvent(eventName, {
       contact_name: contact_name || '',
       opportunity_id: opportunity_id || '',
       stage,

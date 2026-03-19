@@ -12,6 +12,7 @@ import {
   SolutionSection,
   ClinicGallerySection,
   TestimonialsSection,
+  CEOSection,
   FAQSection,
   Footer,
 } from './LandingSections';
@@ -269,6 +270,7 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
     }
 
     analytics.trackEvent('short_quiz_completed', { nicho, ecp, contactScore });
+    analytics.trackEvent('lead_classified', { ecp, traffic_source: classifyTrafficSource(utmParams), funnel_type: 'quiz_corto', nicho });
 
     // Fake analysis delay
     setTimeout(() => {
@@ -298,7 +300,7 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
   if (phase === 'results') {
     const ecp = SITUACION_ECP[answers.situacion] || config.ecp;
     const ecpMsg = ECP_MESSAGES[ecp] || ECP_MESSAGES['Hombre con caida sin diagnostico'];
-    const isDerivacion = ecp === 'No Candidato';
+    const isDerivacion = ecp === 'No candidato - cuero cabelludo';
     const WA_PHONE = '34623457218';
     const waText = encodeURIComponent(
       `Hola, soy ${form.nombre.split(' ')[0]}. Acabo de completar el diagnóstico rápido en Hospital Capilar. Me gustaría recibir más información.`
@@ -810,6 +812,7 @@ const ShortQuizLanding = ({ nicho = 'hombres-caida' }) => {
       <SolutionSection solution={config.solution} />
       <ClinicGallerySection />
       <TestimonialsSection testimonials={config.testimonials} />
+      <CEOSection />
       <FAQSection faqs={config.faqs} />
 
       {/* Final CTA */}

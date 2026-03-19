@@ -127,7 +127,8 @@ export function useAnalytics() {
 
   const trackFormSubmitted = useCallback((leadData, answers) => {
     const leadScore = calculateLeadScore(answers);
-    const answersHash = btoa(JSON.stringify(answers)).slice(0, 20);
+    let answersHash = '';
+    try { answersHash = btoa(unescape(encodeURIComponent(JSON.stringify(answers)))).slice(0, 20); } catch (e) { answersHash = 'hash_error'; }
     const context = getEventContext();
 
     safeCapture(ANALYTICS_EVENTS.FORM_SUBMITTED, {

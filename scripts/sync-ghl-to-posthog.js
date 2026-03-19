@@ -143,11 +143,13 @@ async function main() {
       });
     }
 
+    const eventTimestamp = opp.lastStageChangeAt || opp.updatedAt || opp.createdAt || new Date().toISOString();
+
     for (const eventName of eventsToSend) {
       events.push({
         event: eventName,
-        properties: { ...baseProps },
-        timestamp: opp.createdAt || new Date().toISOString(),
+        properties: { ...baseProps, $insert_id: `${opp.id}_${eventName}` },
+        timestamp: eventTimestamp,
       });
     }
   }

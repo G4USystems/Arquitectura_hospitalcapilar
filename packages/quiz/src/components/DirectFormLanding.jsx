@@ -11,6 +11,7 @@ import {
   SolutionSection,
   ClinicGallerySection,
   TestimonialsSection,
+  CEOSection,
   FAQSection,
   Footer,
 } from './LandingSections';
@@ -67,6 +68,7 @@ const DirectFormLanding = ({ nicho = 'hombres-caida' }) => {
       provincia: form.provincia,
       utm_source: utmParams.utm_source || 'direct',
     });
+    analytics.trackEvent('lead_classified', { ecp: config.ecp, traffic_source: classifyTrafficSource(utmParams), funnel_type: 'formulario_directo', nicho });
 
     const nameParts = form.nombre.trim().split(' ');
     const firstName = nameParts[0] || '';
@@ -204,7 +206,7 @@ const DirectFormLanding = ({ nicho = 'hombres-caida' }) => {
           gclid: utmParams.gclid || null,
           referrer: document.referrer || 'direct',
           landing_url: window.location.href,
-          door: formDoor,
+          door: 'form',
         },
         ghl: ghlResult,
         status: 'new',
@@ -415,6 +417,7 @@ const DirectFormLanding = ({ nicho = 'hombres-caida' }) => {
       <SolutionSection solution={config.solution} />
       <ClinicGallerySection />
       <TestimonialsSection testimonials={config.testimonials} />
+      <CEOSection />
       <FAQSection faqs={config.faqs} />
 
       {/* Final CTA */}

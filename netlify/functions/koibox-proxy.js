@@ -419,7 +419,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
   }
 
   // 4. Update Firestore lead with appointment info
-  updateLeadByEmail(email, {
+  await updateLeadByEmail(email, {
     appointmentStatus: 'booked',
     appointmentClinica: clinica || '',
     appointmentFecha: fecha || '',
@@ -430,7 +430,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
 
   // 5. Track in PostHog server-side (enrich with lead attribution)
   const leadSource = await getLeadSourceByEmail(email);
-  trackServerEvent('appointment_booked', {
+  await trackServerEvent('appointment_booked', {
     clinica,
     fecha,
     hora_inicio,
@@ -507,7 +507,7 @@ async function cancelAppointment(body, koiboxHeaders, corsHeaders) {
   }
 
   // 3. Track in PostHog
-  trackServerEvent('appointment_cancelled', {
+  await trackServerEvent('appointment_cancelled', {
     koibox_id,
     reason: reason || 'patient_cancelled',
     ghl_contact_id: ghl_contact_id || '',
@@ -818,7 +818,7 @@ async function rescheduleAppointment(body, koiboxHeaders, corsHeaders) {
   const createData = JSON.parse(createResult.body);
 
   // 3. Track reschedule event
-  trackServerEvent('appointment_rescheduled', {
+  await trackServerEvent('appointment_rescheduled', {
     old_koibox_id: koibox_id,
     new_koibox_id: createData.appointmentId || '',
     clinica,
@@ -1047,27 +1047,30 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
  * Track an event server-side to PostHog.
  * Fire-and-forget: does not block the response.
  */
-function trackServerEvent(eventName, properties = {}, distinctId = null) {
+async function trackServerEvent(eventName, properties = {}, distinctId = null) {
   const posthogKey = process.env.VITE_POSTHOG_KEY;
   if (!posthogKey) return;
 
   const payload = {
     api_key: posthogKey,
     event: eventName,
+    timestamp: new Date().toISOString(),
     properties: {
       ...properties,
       distinct_id: distinctId || 'server-anonymous',
       $lib: 'server-netlify',
-      timestamp: new Date().toISOString(),
     },
   };
 
-  // Fire-and-forget
-  fetch(`${POSTHOG_HOST}/capture/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  }).catch(err => console.log('[PostHog] Server capture failed:', err.message));
+  try {
+    await fetch(`${POSTHOG_HOST}/capture/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.log('[PostHog] Server capture failed:', err.message);
+  }
 }
 
 /**

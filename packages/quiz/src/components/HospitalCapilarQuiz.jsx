@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ChevronRight, CheckCircle2, ArrowLeft, ShieldCheck, Stethoscope,
   Sparkles, Dna, MapPin, Info, PhoneCall, Calendar, Download, FileText,
-  Check, X, Star, ChevronDown, Lock, Phone
+  Check, X, Star, ChevronDown, Lock, Phone, Users, Heart
 } from 'lucide-react';
 import { useAnalytics } from '@hospital-capilar/shared/analytics';
 import { getUTMParams, classifyTrafficSource, detectFunnelType } from '@hospital-capilar/shared/analytics';
@@ -450,6 +450,24 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
         { label: 'Es lo que más me preocupa de mi salud ahora mismo', value: 'critico' }
       ]
     },
+    // 🆕 SOCIAL PROOF 1: Validación emocional (después de impacto)
+    {
+      id: 'social_validacion', block: 2,
+      type: 'info',
+      infoContent: {
+        icon: 'heart',
+        headline: 'No estás solo/a en esto',
+        body: 'Miles de pacientes han pasado por donde tú estás ahora. Nuestro equipo médico especializado en salud capilar ha ayudado a cada uno de ellos a entender su caso y encontrar una solución real.',
+        stats: [
+          { value: '+10.000', label: 'pacientes atendidos' },
+          { value: '4.8/5', label: 'valoración media' },
+          { value: '3', label: 'clínicas en España' },
+        ],
+        image: 'https://res.cloudinary.com/dsc0jsbkz/image/upload/f_auto,q_auto,w_800/v1773931166/mejores_cirujanos_de_injerto_capilar_w5ppmh.jpg',
+        imageAlt: 'Equipo médico Hospital Capilar',
+        cta: 'Seguir con mi diagnóstico',
+      },
+    },
     {
       id: 'diagnostico_previo', block: 2,
       title: '¿Tienes alguna alopecia diagnosticada?',
@@ -462,6 +480,22 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
         { label: 'Sí, alopecia areata', value: 'areata' },
         { label: 'Sí, otro tipo de alopecia', value: 'otra' }
       ]
+    },
+    // 🆕 SOCIAL PROOF 2: Resultados reales (después de diagnostico_previo)
+    {
+      id: 'social_resultados', block: 2,
+      type: 'info',
+      infoContent: {
+        icon: 'sparkles',
+        headline: 'Resultados reales de pacientes reales',
+        body: 'Cada caso es único. Por eso el primer paso siempre es un diagnóstico profesional con tricoscopía y analítica — no una consulta comercial.',
+        gallery: [
+          { src: 'https://res.cloudinary.com/dsc0jsbkz/image/upload/f_auto,q_auto,w_800/v1773931166/Recepcion_ywqbi8.jpg', alt: 'Recepción Hospital Capilar' },
+          { src: 'https://res.cloudinary.com/dsc0jsbkz/image/upload/f_auto,q_auto,w_800/v1773931166/hrt_d1vm3u.jpg', alt: 'Tratamiento capilar avanzado' },
+          { src: 'https://res.cloudinary.com/dsc0jsbkz/image/upload/f_auto,q_auto,w_800/v1773931166/tratamientos_mujer_crt_gpxgxm.jpg', alt: 'Consulta capilar personalizada' },
+        ],
+        cta: 'Continuar',
+      },
     },
     {
       id: 'motivacion', block: 2,
@@ -486,6 +520,34 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
         { label: 'Saber si necesito cirugía o tratamiento', value: 'diagnostico' },
         { label: 'Mantener los resultados de mi cirugía', value: 'mantenimiento' }
       ]
+    },
+    // 🆕 SOCIAL PROOF 3: Testimonio dinámico (antes de inversión)
+    {
+      id: 'social_testimonio', block: 3,
+      type: 'info',
+      infoContentFn: (ans) => {
+        // Pick a relevant testimonial based on profile
+        const ecpMap = {
+          'mala-experiencia': 'Ya Me Engañaron',
+          'post-cirugia': 'La Inversión',
+          'postparto': 'Lo Que Vino Con el Bebé',
+        };
+        let ecpKey = ecpMap[ans.problema];
+        if (!ecpKey) {
+          if (ans.sexo === 'mujer') ecpKey = 'Es Normal';
+          else if (ans.edad === '18-25') ecpKey = 'El Espejo';
+          else if ((ans.probado || []).some(v => ['otc', 'minoxidil'].includes(v)) && !(ans.probado || []).includes('nada')) ecpKey = 'OTC frustrado sin resultado';
+          else ecpKey = '¿Qué Me Pasa?';
+        }
+        const testimonials = TESTIMONIALS_BY_ECP[ecpKey] || TESTIMONIALS_BY_ECP['¿Qué Me Pasa?'];
+        const t = testimonials[0];
+        return {
+          icon: 'star',
+          headline: 'Alguien como tú ya dio el paso',
+          testimonial: t,
+          cta: 'Ya casi termino',
+        };
+      },
     },
     {
       id: 'inversion', block: 3,
@@ -649,7 +711,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
     setFinalResult(result);
 
     // Track ECP classification for PostHog dashboard
-    analytics.trackEvent('lead_classified', { ecp, frame });
+    analytics.trackEvent('lead_classified', { ecp, frame, traffic_source: trafficSource, funnel_type: funnelType, nicho });
 
     // Generate labels and agent message FIRST (needed by GHL and Firestore)
     let agentMessage = '';
@@ -1169,7 +1231,7 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
       const progressPct = Math.round((stepIndex / activeQuestions.length) * 100);
       const timeInQuiz = quizStartTime.current ? Math.round((Date.now() - quizStartTime.current) / 1000) : 0;
       analytics.trackEvent('screen_viewed', {
-        screen_type: q.type === 'form' ? 'contact_form' : 'question',
+        screen_type: q.type === 'form' ? 'contact_form' : q.type === 'info' ? 'social_proof' : 'question',
         screen_id: q.id,
         screen_index: stepIndex,
         total_screens: activeQuestions.length,
@@ -1692,7 +1754,73 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
           <div className="w-8" />
         </div>
 
-        {currentQ.type !== 'form' && (
+        {/* INFO SCREEN TYPE — social proof / breathing room */}
+        {currentQ.type === 'info' && (() => {
+          const info = currentQ.infoContentFn ? currentQ.infoContentFn(answers) : currentQ.infoContent;
+          const IconComponent = info.icon === 'heart' ? Heart : info.icon === 'star' ? Star : Sparkles;
+          return (
+            <div className="flex-1 flex flex-col items-center justify-center text-center px-2 -mt-4">
+              <div className="w-16 h-16 bg-[#F0F7F6] rounded-full flex items-center justify-center mx-auto mb-5 shadow-sm">
+                <IconComponent size={30} className="text-[#4CA994]" fill={info.icon === 'star' ? '#4CA994' : 'none'} />
+              </div>
+              <h2 className="text-xl md:text-2xl font-extrabold text-[#2C3E50] mb-3 leading-tight">{info.headline}</h2>
+              {info.body && <p className="text-gray-500 text-[15px] leading-relaxed mb-6 max-w-md">{info.body}</p>}
+
+              {/* Stats row */}
+              {info.stats && (
+                <div className="grid grid-cols-3 gap-4 w-full max-w-sm mb-6">
+                  {info.stats.map((s, i) => (
+                    <div key={i} className="text-center">
+                      <div className="text-xl font-extrabold text-[#4CA994]">{s.value}</div>
+                      <div className="text-xs text-gray-400 font-medium mt-0.5">{s.label}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Single image */}
+              {info.image && (
+                <div className="w-full max-w-sm rounded-2xl overflow-hidden mb-6 shadow-md">
+                  <img src={info.image} alt={info.imageAlt || ''} className="w-full h-48 object-cover" loading="lazy" />
+                </div>
+              )}
+
+              {/* Gallery */}
+              {info.gallery && (
+                <div className="grid grid-cols-3 gap-2 w-full max-w-md mb-6">
+                  {info.gallery.map((img, i) => (
+                    <div key={i} className="rounded-xl overflow-hidden aspect-square shadow-sm">
+                      <img src={img.src} alt={img.alt} className="w-full h-full object-cover" loading="lazy" />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Testimonial */}
+              {info.testimonial && (
+                <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 w-full max-w-md mb-6 text-left">
+                  <div className="flex gap-0.5 mb-2">
+                    {Array.from({ length: info.testimonial.stars }).map((_, j) => (
+                      <Star key={j} size={16} className="text-yellow-400 fill-yellow-400" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 leading-relaxed italic text-[15px] mb-3">"{info.testimonial.text}"</p>
+                  <p className="text-sm font-bold text-gray-900">{info.testimonial.name}, {info.testimonial.age} años</p>
+                </div>
+              )}
+
+              <button
+                onClick={handleNext}
+                className="w-full max-w-md py-3.5 rounded-xl text-white font-bold text-base shadow-lg hover:-translate-y-0.5 transition-transform"
+                style={{ backgroundColor: theme.primary }}
+              >
+                {info.cta} <ChevronRight size={18} className="inline ml-1 -mt-0.5" />
+              </button>
+            </div>
+          );
+        })()}
+
+        {currentQ.type !== 'form' && currentQ.type !== 'info' && (
           <>
             <div className="mb-5">
               <span className="text-xs font-bold tracking-wider text-[#4CA994] uppercase mb-1.5 block">

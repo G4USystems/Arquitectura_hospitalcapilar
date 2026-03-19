@@ -151,6 +151,7 @@ async function main() {
       event: 'form_submitted',
       properties: {
         distinct_id: email,
+        $insert_id: `${email}_form_submitted_backfill`,
         $lib: 'backfill-script',
         email,
         name,

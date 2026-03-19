@@ -34,14 +34,10 @@ async function fetchAllOpportunities() {
   let startAfterId = '';
   let hasMore = true;
 
-  // Only fetch opportunities updated in the last 2 hours to avoid re-processing everything
-  const now = new Date();
-  const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
-  const startDate = encodeURIComponent(twoHoursAgo.toISOString());
-  const endDate = encodeURIComponent(now.toISOString());
-
+  // GHL opportunities/search does NOT support startDate/endDate filtering
+  // Deduplication is handled via $insert_id on each event
   while (hasMore) {
-    const url = `${GHL_BASE}/opportunities/search?location_id=${GHL_LOCATION}&pipeline_id=${PIPELINE_ID}&limit=20&startDate=${startDate}&endDate=${endDate}${startAfterId ? `&startAfterId=${startAfterId}` : ''}`;
+    const url = `${GHL_BASE}/opportunities/search?location_id=${GHL_LOCATION}&pipeline_id=${PIPELINE_ID}&limit=20${startAfterId ? `&startAfterId=${startAfterId}` : ''}`;
     const res = await fetch(url, { headers });
     const data = await res.json();
     const opps = data.opportunities || [];
@@ -94,6 +90,9 @@ exports.handler = async (event) => {
       }
     }
 
+    // Use the most recent timestamp available (stage change > updated > created)
+    const eventTimestamp = opp.lastStageChangeAt || opp.updatedAt || opp.createdAt || new Date().toISOString();
+
     const baseProps = {
       distinct_id: distinctId,
       $lib: 'ghl-sync-scheduled',
@@ -106,13 +105,12 @@ exports.handler = async (event) => {
       ...leadSource,
     };
 
-    // Send $identify so PostHog merges with frontend anonymous user
+    // Send $set to update person properties (no $identify — merge happens via frontend posthog.identify)
     if (email) {
       events.push({
-        event: '$identify',
+        event: '$set',
         properties: {
           distinct_id: email,
-          $insert_id: `${opp.id}_$identify`,
           $set: {
             email,
             name: contact.name || opp.name || '',
@@ -122,7 +120,7 @@ exports.handler = async (event) => {
             ...leadSource,
           },
         },
-        timestamp: opp.createdAt || new Date().toISOString(),
+        timestamp: eventTimestamp,
       });
     }
 
@@ -130,7 +128,7 @@ exports.handler = async (event) => {
       events.push({
         event: eventName,
         properties: { ...baseProps, $insert_id: `${opp.id}_${eventName}` },
-        timestamp: opp.createdAt || new Date().toISOString(),
+        timestamp: eventTimestamp,
       });
     }
   }

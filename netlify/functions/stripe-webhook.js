@@ -65,7 +65,7 @@ exports.handler = async (event) => {
 
       // Track in PostHog server-side (enrich with lead attribution)
       const leadSource = await getLeadSourceByEmail(session.customer_email);
-      trackServerEvent('payment_completed', {
+      await trackServerEvent('payment_completed', {
         amount: session.amount_total / 100,
         currency: session.currency,
         stripe_session_id: session.id,
@@ -309,24 +309,28 @@ async function syncPaymentToKoibox(email, koiboxId, session) {
  * Track an event server-side to PostHog.
  * Fire-and-forget: does not block the response.
  */
-function trackServerEvent(eventName, properties = {}, distinctId = null) {
+async function trackServerEvent(eventName, properties = {}, distinctId = null) {
   const posthogKey = process.env.VITE_POSTHOG_KEY;
   if (!posthogKey) return;
 
   const payload = {
     api_key: posthogKey,
     event: eventName,
+    timestamp: new Date().toISOString(),
     properties: {
       ...properties,
       distinct_id: distinctId || 'server-anonymous',
       $lib: 'server-netlify',
-      timestamp: new Date().toISOString(),
     },
   };
 
-  fetch(`${POSTHOG_HOST}/capture/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  }).catch(err => console.log('[PostHog] Server capture failed:', err.message));
+  try {
+    await fetch(`${POSTHOG_HOST}/capture/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+  } catch (err) {
+    console.log('[PostHog] Server capture failed:', err.message);
+  }
 }
