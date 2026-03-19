@@ -1416,19 +1416,20 @@ const HospitalCapilarQuiz = ({ nicho = null, skipIntro = false }) => {
     const waUrl = `https://wa.me/${WA_PHONE}?text=${waText}`;
 
     const handlePrimaryClick = () => {
+      if (ctaType === 'whatsapp') {
+        window.location.href = waUrl;
+      }
       handleCTAClick(ctaType);
       if (ctaType === 'pagar_bono') {
         handleStartPayment();
-      } else if (ctaType === 'whatsapp') {
-        window.open(waUrl, '_blank');
       }
     };
 
     const handleSecondaryClick = () => {
-      handleCTAClick(cta.secondary.type);
       if (cta.secondary.type === 'whatsapp') {
-        window.open(waUrl, '_blank');
+        window.location.href = waUrl;
       }
+      handleCTAClick(cta.secondary.type);
     };
 
     const objections = OBJECTIONS_BY_ECP[ecp] || [];

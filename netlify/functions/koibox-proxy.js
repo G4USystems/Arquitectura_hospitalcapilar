@@ -335,7 +335,7 @@ async function createAppointment(body, koiboxHeaders, corsHeaders) {
               const oppDetail = await oppDetailRes.json();
               const oppCfs = oppDetail?.opportunity?.customFields || [];
               const statusField = oppCfs.find(f => f.id === 'Hk81fRW2HaTqlry4I1L0');
-              bonoPaid = statusField?.value === 'paid';
+              bonoPaid = statusField?.value?.startsWith('paid');
             }
           }
         }
@@ -527,10 +527,6 @@ async function syncCancellationToGHL(contactId, apiKey, koiboxId, reason) {
   };
   const locationId = process.env.VITE_GHL_LOCATION_ID || 'U4SBRYIlQtGBDHLFwEUf';
 
-  // Opportunity custom field IDs
-  const OPP_CF_CANCEL = {
-    tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',
-  };
   const PIPELINE_STAGE_CANCELLED = 'c961b576-b14d-43a6-ac75-a26695886d58'; // Lost/Cancelled
 
   // Contact custom field IDs
@@ -553,11 +549,10 @@ async function syncCancellationToGHL(contactId, apiKey, koiboxId, reason) {
       await fetch(`${GHL_BASE}/opportunities/${opp.id}`, {
         method: 'PUT',
         headers: ghlHeaders,
+        // Note: tratamiento_status is NOT changed — it preserves payment state (not_paid/paid_195/paid_70)
+        // Cancellation is tracked via pipelineStageId only
         body: JSON.stringify({
           pipelineStageId: PIPELINE_STAGE_CANCELLED,
-          customFields: [
-            { id: OPP_CF_CANCEL.tratamiento_status, field_value: 'cancelled' },
-          ],
         }),
       });
       console.log('[Cancel→GHL] Opportunity updated to cancelled:', opp.id);
@@ -731,8 +726,9 @@ async function syncAppointmentToGHL({ nombre, email, movil, fecha, hora_inicio, 
 
     if (opportunities.length > 0) {
       const opp = opportunities[0];
+      // Note: tratamiento_status is NOT updated here — it tracks payment (not_paid/paid_195/paid_70),
+      // booking state is tracked via pipelineStageId
       const customFields = [
-        { id: OPP_CF_BOOKING.tratamiento_status, field_value: 'booked' },
         { id: OPP_CF_BOOKING.koibox_id, field_value: koiboxId || '' },
         { id: OPP_CF_BOOKING.appointment_date, field_value: fecha || '' },
         { id: OPP_CF_BOOKING.appointment_hour, field_value: hora_inicio || '' },
