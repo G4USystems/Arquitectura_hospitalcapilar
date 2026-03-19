@@ -531,7 +531,7 @@ async function syncCancellationToGHL(contactId, apiKey, koiboxId, reason) {
   const OPP_CF_CANCEL = {
     tratamiento_status: 'Hk81fRW2HaTqlry4I1L0',
   };
-  const PIPELINE_STAGE_CANCELLED = '8a3b4c5d-cancelled'; // TODO: replace with real stage ID from GHL
+  const PIPELINE_STAGE_CANCELLED = 'c961b576-b14d-43a6-ac75-a26695886d58'; // Lost/Cancelled
 
   // Contact custom field IDs
   const APPOINTMENT_CF = {
